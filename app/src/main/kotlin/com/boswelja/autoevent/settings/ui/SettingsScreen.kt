@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.boswelja.autoevent.R
-import com.boswelja.autoevent.notificationlistener.NotiListenerService
+import com.boswelja.autoevent.notificationeventextractor.NotiEventExtractorService
 import com.boswelja.autoevent.settings.NotificationListenerSettings
 import kotlinx.coroutines.Dispatchers
 
@@ -45,7 +45,7 @@ fun SettingsScreen(
             modifier = Modifier
                 .clickable {
                     listenerSettingsLauncher.launch(
-                        ComponentName(context, NotiListenerService::class.java)
+                        ComponentName(context, NotiEventExtractorService::class.java)
                     )
                 },
             text = {

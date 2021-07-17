@@ -1,4 +1,4 @@
-package com.boswelja.autoevent.notificationlistener
+package com.boswelja.autoevent.notificationeventextractor
 
 import android.app.Notification
 import android.service.notification.NotificationListenerService
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class NotiListenerService : NotificationListenerService() {
+class NotiEventExtractorService : NotificationListenerService() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
