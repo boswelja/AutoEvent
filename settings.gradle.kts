@@ -19,3 +19,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "AutoEvent"
 include(":app")
+
+enableFeaturePreview("VERSION_CATALOGS")
