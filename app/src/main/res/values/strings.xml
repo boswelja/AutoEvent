@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">AutoEvent</string>
     <string name="noti_listener_label">Notification Event Extractor</string>
+
+    <string name="noti_listener_settings_title">Notification Access Settings</string>
+    <string name="noti_listener_settings_disabled_desc">We need access to your notifications before we can continue</string>
+    <string name="noti_listener_settings_enabled_desc">Manage what we can access</string>
 </resources>
