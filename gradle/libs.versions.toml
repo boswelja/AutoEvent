@@ -38,6 +38,7 @@ androidx-datastore-proto = { module = "androidx.datastore:datastore", version.re
 # Compose Libraries
 androidx-compose-ui-core = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+androidx-compose-ui-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 androidx-compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 androidx-compose-material-core = { module = "androidx.compose.material:material", version.ref = "compose" }
@@ -60,6 +61,7 @@ strikt-mockk = { module = "io.strikt:strikt-mockk", version.ref = "strikt" }
 [bundles]
 compose = [
     "androidx-compose-ui-core",
+    "androidx-compose-ui-preview",
     "androidx-compose-foundation",
     "androidx-compose-material-core",
     "androidx-compose-material-icons-core",
