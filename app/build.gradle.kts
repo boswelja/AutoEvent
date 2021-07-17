@@ -10,8 +10,8 @@ android {
         applicationId = "com.boswelja.autoevent"
         minSdk = 26
         targetSdk = 31
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = PackageInfo.getVersionCode()
+        versionName = PackageInfo.getVersionName()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,6 +23,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            applicationIdSuffix = ".debug"
         }
     }
 
