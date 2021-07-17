@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AutoEvent</string>
+    <string name="noti_listener_label">Notification Event Extractor</string>
 </resources>

@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.datastore.proto)
 
     implementation(libs.bundles.compose)
+    implementation(libs.mlkit.entityextraction)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
 

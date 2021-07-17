@@ -17,7 +17,7 @@ accompanist = "0.14.0"
 # Misc versions
 billingClient = "3.0.3"
 coroutines = "1.5.0"
-entity-extraction = "16.0.0-beta01"
+entity-extraction = "16.0.0-beta1"
 junit = "4.13.2"
 mockk = "1.12.0"
 robolectric = "4.6.1"
