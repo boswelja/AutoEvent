@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+message ExtractorSettings {
+    enum ExtractorLanguage {
+        DETECT = 0;
+        ARABIC = 1;
+        CHINESE = 2;
+        DUTCH = 3;
+        ENGLISH = 4;
+        FRENCH = 5;
+        GERMAN = 6;
+        ITALIAN = 7;
+        JAPANESE = 8;
+        KOREAN = 9;
+        POLISH = 10;
+        PORTUGUESE = 11;
+        RUSSIAN = 12;
+        SPANISH = 13;
+        THAI = 14;
+        TURKISH = 15;
+    }
+
+    ExtractorLanguage language = 1;
+}
