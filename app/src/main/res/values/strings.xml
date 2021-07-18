@@ -5,4 +5,14 @@
     <string name="noti_listener_settings_title">Notification Access Settings</string>
     <string name="noti_listener_settings_disabled_desc">We need access to your notifications before we can continue</string>
     <string name="noti_listener_settings_enabled_desc">Manage what we can access</string>
+
+    <string name="event_from">Starting: %s</string>
+    <string name="event_to">Finishing: %s</string>
+    <string name="event_at">Location: %s</string>
+
+    <string name="event_add_to_calendar">Add to Calendar</string>
+
+    <string name="event_noti_channel_name">Discovered Events</string>
+    <string name="event_noti_title">Event Found</string>
+    <string name="event_noti_summary">We found an event starting at %s</string>
 </resources>
