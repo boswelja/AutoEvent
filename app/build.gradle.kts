@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("com.squareup.wire")
 }
 
 android {
@@ -72,4 +73,11 @@ dependencies {
     androidTestImplementation(libs.strikt.mockk)
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.mockk.android)
+}
+
+wire {
+    kotlin {
+        android = true
+        rpcCallStyle = "suspending"
+    }
 }

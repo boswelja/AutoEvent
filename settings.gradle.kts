@@ -9,6 +9,13 @@ pluginManagement {
         id("com.android.library") version "7.1.0-alpha03"
         id("org.jetbrains.kotlin.android") version "1.5.10"
     }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "com.squareup.wire") {
+                useModule("com.squareup.wire:wire-gradle-plugin:3.7.0")
+            }
+        }
+    }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
