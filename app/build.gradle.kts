@@ -79,6 +79,5 @@ dependencies {
 wire {
     kotlin {
         android = true
-        rpcCallStyle = "suspending"
     }
 }

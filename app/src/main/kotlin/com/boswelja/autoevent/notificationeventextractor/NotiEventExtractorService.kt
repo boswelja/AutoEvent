@@ -15,6 +15,7 @@ import androidx.core.content.getSystemService
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.eventextractor.EventDetails
 import com.boswelja.autoevent.eventextractor.EventExtractor
+import com.boswelja.autoevent.eventextractor.ExtractorSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel

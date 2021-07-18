@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option java_package = "com.boswelja.autoevent.eventextractor";
+
 message ExtractorSettings {
     enum ExtractorLanguage {
         DETECT = 0;
