@@ -51,6 +51,7 @@ accompanist-sysuicontroller = { module = "com.google.accompanist:accompanist-sys
 # Misc libraries
 mlkit-entityextraction = { module = "com.google.mlkit:entity-extraction", version.ref = "entity-extraction" }
 junit = { module = "junit:junit", version.ref = "junit" }
+kotlinx-coroutines-play = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 mockk-core = { module = "io.mockk:mockk", version.ref = "mockk" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }

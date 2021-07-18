@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.datastore.proto)
 
+    implementation(libs.kotlinx.coroutines.play)
     implementation(libs.bundles.compose)
     implementation(libs.mlkit.entityextraction)
 
