@@ -1,6 +1,5 @@
 package com.boswelja.autoevent.eventextractor
 
-import android.util.Log
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.entityextraction.DateTimeEntity
 import com.google.mlkit.nl.entityextraction.Entity
@@ -12,24 +11,25 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.tasks.await
 import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-class EventExtractor {
+class EventExtractor(
+    language: ExtractorSettings.ExtractorLanguage
+) {
     private val modelDownloaded = MutableStateFlow(false)
-    private val eventExtractor: EntityExtractor
+    private val entityExtractor: EntityExtractor
 
     init {
-        // TODO Load language from settings
-        val options = EntityExtractorOptions.Builder(EntityExtractorOptions.ENGLISH)
+        val options = EntityExtractorOptions.Builder(getLanguageOption(language))
             .build()
-        eventExtractor = EntityExtraction.getClient(options)
+        entityExtractor = EntityExtraction.getClient(options)
 
         // Download model if needed
         val modelDownloadConditions = DownloadConditions.Builder()
             .build()
-        eventExtractor.downloadModelIfNeeded(modelDownloadConditions)
+        entityExtractor.downloadModelIfNeeded(modelDownloadConditions)
             .addOnSuccessListener {
-                Log.i("NotiListenerService", "Model downloaded")
                 modelDownloaded.tryEmit(true)
             }
             .addOnFailureListener {
@@ -48,7 +48,7 @@ class EventExtractor {
             )
             .build()
 
-        val annotations = eventExtractor.annotate(params).await()
+        val annotations = entityExtractor.annotate(params).await()
         return annotations.map { annotation ->
             // We can only have annotations with DateTimeEntities due to our params
             val dateTimeEntity = annotation.entities.first {
@@ -73,5 +73,31 @@ class EventExtractor {
             else -> TimeUnit.HOURS.toMillis(1)
         }
         return startMillis + durationMillis
+    }
+
+    private fun getLanguageOption(language: ExtractorSettings.ExtractorLanguage): String {
+        return when (language) {
+            ExtractorSettings.ExtractorLanguage.DETECT -> {
+                // Get the language for the current Locale, or default to English
+                EntityExtractorOptions.fromLanguageTag(
+                    Locale.getDefault().toLanguageTag()
+                ) ?: EntityExtractorOptions.ENGLISH
+            }
+            ExtractorSettings.ExtractorLanguage.ARABIC -> EntityExtractorOptions.ARABIC
+            ExtractorSettings.ExtractorLanguage.CHINESE -> EntityExtractorOptions.CHINESE
+            ExtractorSettings.ExtractorLanguage.DUTCH -> EntityExtractorOptions.DUTCH
+            ExtractorSettings.ExtractorLanguage.ENGLISH -> EntityExtractorOptions.ENGLISH
+            ExtractorSettings.ExtractorLanguage.FRENCH -> EntityExtractorOptions.FRENCH
+            ExtractorSettings.ExtractorLanguage.GERMAN -> EntityExtractorOptions.GERMAN
+            ExtractorSettings.ExtractorLanguage.ITALIAN -> EntityExtractorOptions.ITALIAN
+            ExtractorSettings.ExtractorLanguage.JAPANESE -> EntityExtractorOptions.JAPANESE
+            ExtractorSettings.ExtractorLanguage.KOREAN -> EntityExtractorOptions.KOREAN
+            ExtractorSettings.ExtractorLanguage.POLISH -> EntityExtractorOptions.POLISH
+            ExtractorSettings.ExtractorLanguage.PORTUGUESE -> EntityExtractorOptions.PORTUGUESE
+            ExtractorSettings.ExtractorLanguage.RUSSIAN -> EntityExtractorOptions.RUSSIAN
+            ExtractorSettings.ExtractorLanguage.SPANISH -> EntityExtractorOptions.SPANISH
+            ExtractorSettings.ExtractorLanguage.THAI -> EntityExtractorOptions.THAI
+            ExtractorSettings.ExtractorLanguage.TURKISH -> EntityExtractorOptions.TURKISH
+        }
     }
 }

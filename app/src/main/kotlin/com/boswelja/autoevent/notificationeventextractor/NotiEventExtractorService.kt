@@ -32,7 +32,7 @@ class NotiEventExtractorService : NotificationListenerService() {
 
     override fun onListenerConnected() {
         Log.i("NotiEventExtractorService", "Listener connected")
-        eventExtractor = EventExtractor()
+        eventExtractor = EventExtractor(ExtractorSettings.ExtractorLanguage.DETECT)
         notificationManager = getSystemService()!!
         createNotificationChannel()
     }
