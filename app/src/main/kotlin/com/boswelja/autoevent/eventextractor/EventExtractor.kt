@@ -37,6 +37,8 @@ class EventExtractor(
             }
     }
 
+    fun close() = entityExtractor.close()
+
     suspend fun extractEventsFrom(text: String): List<EventDetails> {
         // Wait for model to be downloaded
         modelDownloaded.first { it }

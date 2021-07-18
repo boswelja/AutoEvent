@@ -37,6 +37,7 @@ class NotiEventExtractorService : NotificationListenerService() {
         Log.i("NotiEventExtractorService", "Listener connected")
         coroutineScope.launch {
             extractorSettingsDataStore.data.map { it.language }.collect {
+                eventExtractor?.close()
                 eventExtractor = EventExtractor(it)
             }
         }
@@ -47,6 +48,7 @@ class NotiEventExtractorService : NotificationListenerService() {
     override fun onListenerDisconnected() {
         Log.i("NotiListenerService", "Listener disconnected")
         coroutineScope.cancel()
+        eventExtractor?.close()
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
