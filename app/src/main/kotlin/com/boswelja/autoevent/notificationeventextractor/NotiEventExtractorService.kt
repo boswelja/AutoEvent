@@ -15,10 +15,12 @@ import androidx.core.content.getSystemService
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.eventextractor.EventDetails
 import com.boswelja.autoevent.eventextractor.EventExtractor
-import com.boswelja.autoevent.eventextractor.ExtractorSettings
+import com.boswelja.autoevent.eventextractor.extractorSettingsDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.concurrent.atomic.AtomicInteger
@@ -28,12 +30,16 @@ class NotiEventExtractorService : NotificationListenerService() {
     private val idCounter = AtomicInteger()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    private lateinit var eventExtractor: EventExtractor
+    private var eventExtractor: EventExtractor? = null
     private lateinit var notificationManager: NotificationManager
 
     override fun onListenerConnected() {
         Log.i("NotiEventExtractorService", "Listener connected")
-        eventExtractor = EventExtractor(ExtractorSettings.ExtractorLanguage.DETECT)
+        coroutineScope.launch {
+            extractorSettingsDataStore.data.map { it.language }.collect {
+                eventExtractor = EventExtractor(it)
+            }
+        }
         notificationManager = getSystemService()!!
         createNotificationChannel()
     }
@@ -45,6 +51,7 @@ class NotiEventExtractorService : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         if (sbn == null) return
+        if (eventExtractor == null) return
         Log.d("NotiEventExtractorService", "Got notification")
         coroutineScope.launch {
             val messageStyle = NotificationCompat.MessagingStyle
@@ -56,7 +63,7 @@ class NotiEventExtractorService : NotificationListenerService() {
                 Log.d("NotiEventExtractorService", "Got standard notification")
                 sbn.notification.extras.getString(Notification.EXTRA_TEXT, "")
             }
-            val eventDetails = eventExtractor.extractEventsFrom(text)
+            val eventDetails = eventExtractor!!.extractEventsFrom(text)
             Log.d("NotiEventExtractorService", "Got ${eventDetails.count()} event details")
             eventDetails.forEach {
                 postEventNotification(it)
