@@ -23,4 +23,6 @@ message ExtractorSettings {
     }
 
     ExtractorLanguage language = 1;
+    bool extractLocation = 2;
+    bool extractEmails = 3;
 }
