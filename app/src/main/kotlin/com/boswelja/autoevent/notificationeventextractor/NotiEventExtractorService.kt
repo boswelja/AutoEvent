@@ -86,16 +86,11 @@ class NotiEventExtractorService : NotificationListenerService() {
         val dateFormatter = DateFormat.getDateTimeInstance()
         val formattedStart = dateFormatter.format(eventDetails.startDateTime.time)
 
-        val detailString = StringBuilder()
-        detailString.appendLine(getString(R.string.event_from, formattedStart))
-
         val notification = Notification.Builder(this, EventDetailsChannel)
             .setContentTitle(getString(R.string.event_noti_title))
             .setContentText(getString(R.string.event_noti_summary, formattedStart))
             .setSmallIcon(R.drawable.noti_ic_event_found)
-            .setStyle(
-                Notification.BigTextStyle().bigText(detailString.toString())
-            )
+            .setStyle(createNotificationStyleForEvent(eventDetails))
             .addAction(
                 Notification.Action.Builder(
                     Icon.createWithResource(this, R.drawable.noti_ic_event_add),
@@ -106,6 +101,32 @@ class NotiEventExtractorService : NotificationListenerService() {
             .build()
 
         notificationManager.notify(notificationId, notification)
+    }
+
+    private fun createNotificationStyleForEvent(event: Event): Notification.Style {
+        val text = when (event) {
+            is AllDayEvent -> {
+                val dateFormatter = DateFormat.getDateInstance()
+                val formattedDate = dateFormatter.format(event.startDateTime)
+                var text = getString(R.string.event_all_day, formattedDate)
+                if (event.address != null) {
+                    text += "\n${getString(R.string.event_at, event.address)}"
+                }
+                text
+            }
+            is DateTimeEvent -> {
+                val dateFormatter = DateFormat.getDateTimeInstance()
+                val formattedStart = dateFormatter.format(event.startDateTime)
+                val formattedEnd = dateFormatter.format(event.endDateTime)
+                var text = getString(R.string.event_from, formattedStart)
+                text += "\n${getString(R.string.event_to, formattedEnd)}"
+                if (event.address != null) {
+                    text += "\n${getString(R.string.event_at, event.address)}"
+                }
+                text
+            }
+        }
+        return Notification.BigTextStyle().bigText(text)
     }
 
     private fun createNotificationChannel() {
