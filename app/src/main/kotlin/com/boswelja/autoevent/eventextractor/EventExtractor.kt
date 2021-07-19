@@ -1,5 +1,7 @@
 package com.boswelja.autoevent.eventextractor
 
+import android.content.Context
+import androidx.datastore.core.DataStore
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.entityextraction.DateTimeEntity
 import com.google.mlkit.nl.entityextraction.Entity
@@ -7,50 +9,63 @@ import com.google.mlkit.nl.entityextraction.EntityExtraction
 import com.google.mlkit.nl.entityextraction.EntityExtractionParams
 import com.google.mlkit.nl.entityextraction.EntityExtractor
 import com.google.mlkit.nl.entityextraction.EntityExtractorOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class EventExtractor(
-    language: ExtractorSettings.ExtractorLanguage
+    context: Context,
+    private val settingsStore: DataStore<ExtractorSettings> = context.extractorSettingsDataStore,
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) {
-    private val modelDownloaded = MutableStateFlow(false)
-    private val entityExtractor: EntityExtractor
+
+    private val entityTypesFilter = mutableSetOf(Entity.TYPE_DATE_TIME)
+
+    private val isReady = MutableStateFlow(false)
+    private var entityExtractor: EntityExtractor? = null
 
     init {
-        val options = EntityExtractorOptions.Builder(getLanguageOption(language))
-            .build()
-        entityExtractor = EntityExtraction.getClient(options)
+        coroutineScope.launch {
+            settingsStore.data.collect {
+                isReady.emit(false)
+                entityExtractor?.close()
+                initWithLanguage(it.language)
 
-        // Download model if needed
-        val modelDownloadConditions = DownloadConditions.Builder()
-            .build()
-        entityExtractor.downloadModelIfNeeded(modelDownloadConditions)
-            .addOnSuccessListener {
-                modelDownloaded.tryEmit(true)
+                if (it.extractEmails) {
+                    entityTypesFilter.add(Entity.TYPE_EMAIL)
+                } else {
+                    entityTypesFilter.remove(Entity.TYPE_EMAIL)
+                }
+                if (it.extractLocation) {
+                    entityTypesFilter.add(Entity.TYPE_ADDRESS)
+                } else {
+                    entityTypesFilter.remove(Entity.TYPE_ADDRESS)
+                }
             }
-            .addOnFailureListener {
-                throw it
-            }
+        }
     }
 
-    fun close() = entityExtractor.close()
+    fun close() {
+        coroutineScope.cancel()
+        entityExtractor?.close()
+    }
 
     suspend fun extractEventsFrom(text: String): List<EventDetails> {
         // Wait for model to be downloaded
-        modelDownloaded.first { it }
+        isReady.first { it }
         val params = EntityExtractionParams.Builder(text)
-            .setEntityTypesFilter(
-                setOf(
-                    Entity.TYPE_DATE_TIME
-                )
-            )
+            .setEntityTypesFilter(entityTypesFilter)
             .build()
 
-        val annotations = entityExtractor.annotate(params).await()
+        val annotations = entityExtractor!!.annotate(params).await()
         return annotations.map { annotation ->
             // We can only have annotations with DateTimeEntities due to our params
             val dateTimeEntity = annotation.entities.first {
@@ -101,5 +116,17 @@ class EventExtractor(
             ExtractorSettings.ExtractorLanguage.THAI -> EntityExtractorOptions.THAI
             ExtractorSettings.ExtractorLanguage.TURKISH -> EntityExtractorOptions.TURKISH
         }
+    }
+
+    private suspend fun initWithLanguage(language: ExtractorSettings.ExtractorLanguage) {
+        val options = EntityExtractorOptions.Builder(getLanguageOption(language))
+            .build()
+        entityExtractor = EntityExtraction.getClient(options)
+
+        // Download model if needed
+        val modelDownloadConditions = DownloadConditions.Builder()
+            .build()
+        entityExtractor!!.downloadModelIfNeeded(modelDownloadConditions).await()
+        isReady.emit(true)
     }
 }
