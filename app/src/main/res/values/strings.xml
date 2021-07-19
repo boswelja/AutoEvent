@@ -13,6 +13,9 @@
 
     <string name="event_add_to_calendar">Add to Calendar</string>
 
+    <string name="extract_emails_settings_title">Extract Emails</string>
+    <string name="extract_address_settings_title">Extract Address</string>
+
     <string name="event_noti_channel_name">Discovered Events</string>
     <string name="event_noti_title">Event Found</string>
     <string name="event_noti_summary">We found an event starting at %s</string>

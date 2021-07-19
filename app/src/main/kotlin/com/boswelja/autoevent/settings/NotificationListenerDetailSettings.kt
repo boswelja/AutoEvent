@@ -7,7 +7,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContract
 
-class NotificationListenerSettings : ActivityResultContract<ComponentName, Unit>() {
+class NotificationListenerDetailSettings : ActivityResultContract<ComponentName, Unit>() {
 
     override fun createIntent(context: Context, input: ComponentName?): Intent {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && input != null) {
