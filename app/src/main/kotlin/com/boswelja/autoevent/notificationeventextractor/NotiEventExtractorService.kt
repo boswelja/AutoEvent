@@ -13,7 +13,9 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import com.boswelja.autoevent.R
-import com.boswelja.autoevent.eventextractor.EventDetails
+import com.boswelja.autoevent.eventextractor.AllDayEvent
+import com.boswelja.autoevent.eventextractor.DateTimeEvent
+import com.boswelja.autoevent.eventextractor.Event
 import com.boswelja.autoevent.eventextractor.EventExtractor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,7 +58,7 @@ class NotiEventExtractorService : NotificationListenerService() {
                 Log.d("NotiEventExtractorService", "Got standard notification")
                 sbn.notification.extras.getString(Notification.EXTRA_TEXT, "")
             }
-            val eventDetails = eventExtractor!!.extractEventsFrom(text)
+            val eventDetails = eventExtractor.extractEventsFrom(text)
             Log.d("NotiEventExtractorService", "Got ${eventDetails.count()} event details")
             eventDetails.forEach {
                 postEventNotification(it)
@@ -64,23 +66,30 @@ class NotiEventExtractorService : NotificationListenerService() {
         }
     }
 
-    private fun postEventNotification(eventDetails: EventDetails) {
+    private fun postEventNotification(eventDetails: Event) {
         val notificationId = idCounter.incrementAndGet()
         val createEventIntent = Intent(Intent.ACTION_INSERT)
             .setData(CalendarContract.Events.CONTENT_URI)
-            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, eventDetails.start.time)
-            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, eventDetails.end.time)
+            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, eventDetails.startDateTime.time)
+        when (eventDetails) {
+            is AllDayEvent -> {
+                createEventIntent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true)
+            }
+            is DateTimeEvent -> {
+                createEventIntent.putExtra(
+                    CalendarContract.EXTRA_EVENT_END_TIME, eventDetails.endDateTime.time
+                )
+            }
+        }
         val createPendingIntent = PendingIntent.getActivity(
             this, notificationId, createEventIntent, PendingIntent.FLAG_IMMUTABLE
         )
 
         val dateFormatter = DateFormat.getDateTimeInstance()
-        val formattedStart = dateFormatter.format(eventDetails.start)
-        val formattedEnd = dateFormatter.format(eventDetails.end)
+        val formattedStart = dateFormatter.format(eventDetails.startDateTime.time)
 
         val detailString = StringBuilder()
         detailString.appendLine(getString(R.string.event_from, formattedStart))
-        detailString.appendLine(getString(R.string.event_to, formattedEnd))
 
         val notification = Notification.Builder(this, EventDetailsChannel)
             .setContentTitle(getString(R.string.event_noti_title))

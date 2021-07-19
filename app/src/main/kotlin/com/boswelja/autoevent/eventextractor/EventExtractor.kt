@@ -58,7 +58,7 @@ class EventExtractor(
         entityExtractor?.close()
     }
 
-    suspend fun extractEventsFrom(text: String): List<EventDetails> {
+    suspend fun extractEventsFrom(text: String): List<Event> {
         // Wait for model to be downloaded
         isReady.first { it }
         val params = EntityExtractionParams.Builder(text)
@@ -67,17 +67,21 @@ class EventExtractor(
 
         val annotations = entityExtractor!!.annotate(params).await()
         return annotations.map { annotation ->
-            // We can only have annotations with DateTimeEntities due to our params
+            // TODO This could throw an exception if no DateTimeEntity is found
             val dateTimeEntity = annotation.entities.first {
                 it is DateTimeEntity
             } as DateTimeEntity
             val startDate = Date(dateTimeEntity.timestampMillis)
-            val endDate = Date(
-                estimateEndTimeMillis(
-                    dateTimeEntity.dateTimeGranularity, dateTimeEntity.timestampMillis
+            if (dateTimeEntity.isAllDay()) {
+                AllDayEvent(startDate)
+            } else {
+                val endDate = Date(
+                    estimateEndTimeMillis(
+                        dateTimeEntity.dateTimeGranularity, dateTimeEntity.timestampMillis
+                    )
                 )
-            )
-            EventDetails(startDate, endDate)
+                DateTimeEvent(startDate, endDate)
+            }
         }
     }
 
