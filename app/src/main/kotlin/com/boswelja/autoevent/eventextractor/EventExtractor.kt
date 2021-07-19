@@ -58,7 +58,7 @@ class EventExtractor(
         entityExtractor?.close()
     }
 
-    suspend fun extractEventsFrom(text: String): List<Event> {
+    suspend fun extractEventFrom(text: String): Event? {
         // Wait for model to be downloaded
         isReady.first { it }
         val params = EntityExtractionParams.Builder(text)
@@ -66,33 +66,51 @@ class EventExtractor(
             .build()
 
         val annotations = entityExtractor!!.annotate(params).await()
-        return annotations.map { annotation ->
-            // TODO This could throw an exception if no DateTimeEntity is found
-            val dateTimeEntity = annotation.entities.first {
-                it is DateTimeEntity
-            } as DateTimeEntity
-            val startDate = Date(dateTimeEntity.timestampMillis)
-            if (dateTimeEntity.isAllDay()) {
-                AllDayEvent(startDate)
-            } else {
-                val endDate = Date(
-                    estimateEndTimeMillis(
-                        dateTimeEntity.dateTimeGranularity, dateTimeEntity.timestampMillis
-                    )
+
+        var startDate: Date? = null
+        var isAllDay = false
+        var address: String? = null
+        var emails = arrayOf<String>()
+
+        annotations.forEach { annotation ->
+            // TODO Handle cases where more than one event is found
+            annotation.entities.forEach { entity ->
+                when (entity.type) {
+                    Entity.TYPE_DATE_TIME -> {
+                        entity as DateTimeEntity
+                        isAllDay = entity.isAllDay()
+                        startDate = Date(entity.timestampMillis)
+                    }
+                    Entity.TYPE_ADDRESS -> {
+                        address = annotation.annotatedText
+                    }
+                    Entity.TYPE_EMAIL -> {
+                        emails += annotation.annotatedText
+                    }
+                }
+            }
+        }
+
+        return startDate?.let { startDateTime ->
+            if (isAllDay) {
+                AllDayEvent(
+                    startDateTime = startDateTime,
+                    address = address,
+                    emails = emails
                 )
-                DateTimeEvent(startDate, endDate)
+            } else {
+                DateTimeEvent(
+                    startDateTime = startDateTime,
+                    endDateTime = Date(estimateEndTimeMillis(startDateTime.time)),
+                    address = address,
+                    emails = emails
+                )
             }
         }
     }
 
-    private fun estimateEndTimeMillis(granularity: Int, startMillis: Long): Long {
-        val durationMillis = when (granularity) {
-            DateTimeEntity.GRANULARITY_DAY -> TimeUnit.DAYS.toMillis(1)
-            DateTimeEntity.GRANULARITY_MONTH -> TimeUnit.DAYS.toMillis(30)
-            DateTimeEntity.GRANULARITY_WEEK -> TimeUnit.DAYS.toMillis(7)
-            DateTimeEntity.GRANULARITY_YEAR -> TimeUnit.DAYS.toMillis(365)
-            else -> TimeUnit.HOURS.toMillis(1)
-        }
+    private fun estimateEndTimeMillis(startMillis: Long): Long {
+        val durationMillis = TimeUnit.HOURS.toMillis(1)
         return startMillis + durationMillis
     }
 

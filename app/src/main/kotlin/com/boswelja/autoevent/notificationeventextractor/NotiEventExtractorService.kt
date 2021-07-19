@@ -58,9 +58,7 @@ class NotiEventExtractorService : NotificationListenerService() {
                 Log.d("NotiEventExtractorService", "Got standard notification")
                 sbn.notification.extras.getString(Notification.EXTRA_TEXT, "")
             }
-            val eventDetails = eventExtractor.extractEventsFrom(text)
-            Log.d("NotiEventExtractorService", "Got ${eventDetails.count()} event details")
-            eventDetails.forEach {
+            eventExtractor.extractEventFrom(text)?.let {
                 postEventNotification(it)
             }
         }

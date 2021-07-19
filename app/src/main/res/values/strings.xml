@@ -6,9 +6,10 @@
     <string name="noti_listener_settings_disabled_desc">We need access to your notifications before we can continue</string>
     <string name="noti_listener_settings_enabled_desc">Manage what we can access</string>
 
-    <string name="event_from">Starting: %s</string>
-    <string name="event_to">Finishing: %s</string>
-    <string name="event_at">Location: %s</string>
+    <string name="event_from">Starting %s</string>
+    <string name="event_to">Finishing %s</string>
+    <string name="event_at">At %s</string>
+    <string name="event_all_day">All Day %s</string>
 
     <string name="event_add_to_calendar">Add to Calendar</string>
 
