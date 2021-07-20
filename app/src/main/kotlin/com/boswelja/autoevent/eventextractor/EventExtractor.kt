@@ -28,7 +28,8 @@ class EventExtractor(
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) : Closeable {
 
-    private val entityTypesFilter = mutableSetOf(Entity.TYPE_DATE_TIME)
+    private val coreTypeFilters = setOf(Entity.TYPE_DATE_TIME)
+    private val extraTypeFilters = mutableSetOf<Int>()
 
     private val isReady = MutableStateFlow(false)
     private var entityExtractor: EntityExtractor? = null
@@ -41,14 +42,14 @@ class EventExtractor(
                 initWithLanguage(it.language)
 
                 if (it.extractEmails) {
-                    entityTypesFilter.add(Entity.TYPE_EMAIL)
+                    extraTypeFilters.add(Entity.TYPE_EMAIL)
                 } else {
-                    entityTypesFilter.remove(Entity.TYPE_EMAIL)
+                    extraTypeFilters.remove(Entity.TYPE_EMAIL)
                 }
                 if (it.extractLocation) {
-                    entityTypesFilter.add(Entity.TYPE_ADDRESS)
+                    extraTypeFilters.add(Entity.TYPE_ADDRESS)
                 } else {
-                    entityTypesFilter.remove(Entity.TYPE_ADDRESS)
+                    extraTypeFilters.remove(Entity.TYPE_ADDRESS)
                 }
             }
         }
@@ -63,15 +64,15 @@ class EventExtractor(
         // Wait for model to be downloaded
         isReady.first { it }
         val params = EntityExtractionParams.Builder(text)
-            .setEntityTypesFilter(entityTypesFilter)
+            .setEntityTypesFilter(coreTypeFilters)
             .build()
 
         val annotations = entityExtractor!!.annotate(params).await()
 
+        if (annotations.isEmpty()) return null
+
         var startDate: Date? = null
         var isAllDay = false
-        var address: String? = null
-        var emails = arrayOf<String>()
 
         annotations.forEach { annotation ->
             // TODO Handle cases where more than one event is found
@@ -82,31 +83,43 @@ class EventExtractor(
                         isAllDay = entity.isAllDay()
                         startDate = Date(entity.timestampMillis)
                     }
-                    Entity.TYPE_ADDRESS -> {
-                        address = annotation.annotatedText
-                    }
-                    Entity.TYPE_EMAIL -> {
-                        emails += annotation.annotatedText
-                    }
                 }
             }
         }
 
         return startDate?.let { startDateTime ->
-            if (isAllDay) {
-                AllDayEvent(
-                    startDateTime = startDateTime,
-                    address = address,
-                    emails = emails
-                )
-            } else {
-                DateTimeEvent(
-                    startDateTime = startDateTime,
-                    endDateTime = Date(estimateEndTimeMillis(startDateTime.time)),
-                    address = address,
-                    emails = emails
-                )
+            Event(
+                startDateTime = startDateTime,
+                endDateTime = Date(estimateEndTimeMillis(startDateTime.time)),
+                isAllDay = isAllDay,
+                extras = extractExtrasFrom(text)
+            )
+        }
+    }
+
+    private suspend fun extractExtrasFrom(text: String): Extras {
+        return if (extraTypeFilters.isNotEmpty()) {
+            val params = EntityExtractionParams.Builder(text)
+                .setEntityTypesFilter(extraTypeFilters)
+                .build()
+            val annotations = entityExtractor!!.annotate(params).await()
+            val emails = mutableSetOf<String>()
+            var address: String? = null
+            annotations.forEach { annotation ->
+                annotation.entities.forEach {
+                    when (it.type) {
+                        Entity.TYPE_EMAIL -> {
+                            emails.add(annotation.annotatedText)
+                        }
+                        Entity.TYPE_ADDRESS -> {
+                            address = annotation.annotatedText
+                        }
+                    }
+                }
             }
+            Extras(address, emails)
+        } else {
+            Extras()
         }
     }
 

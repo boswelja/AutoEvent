@@ -13,8 +13,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import com.boswelja.autoevent.R
-import com.boswelja.autoevent.eventextractor.AllDayEvent
-import com.boswelja.autoevent.eventextractor.DateTimeEvent
 import com.boswelja.autoevent.eventextractor.Event
 import com.boswelja.autoevent.eventextractor.EventExtractor
 import kotlinx.coroutines.CoroutineScope
@@ -72,16 +70,8 @@ class NotiEventExtractorService : NotificationListenerService() {
         val createEventIntent = Intent(Intent.ACTION_INSERT)
             .setData(CalendarContract.Events.CONTENT_URI)
             .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, eventDetails.startDateTime.time)
-        when (eventDetails) {
-            is AllDayEvent -> {
-                createEventIntent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true)
-            }
-            is DateTimeEvent -> {
-                createEventIntent.putExtra(
-                    CalendarContract.EXTRA_EVENT_END_TIME, eventDetails.endDateTime.time
-                )
-            }
-        }
+            .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, eventDetails.isAllDay)
+            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, eventDetails.endDateTime.time)
         val createPendingIntent = PendingIntent.getActivity(
             this, notificationId, createEventIntent, PendingIntent.FLAG_IMMUTABLE
         )
@@ -107,27 +97,14 @@ class NotiEventExtractorService : NotificationListenerService() {
     }
 
     private fun createNotificationStyleForEvent(event: Event): Notification.Style {
-        val text = when (event) {
-            is AllDayEvent -> {
-                val dateFormatter = DateFormat.getDateInstance()
-                val formattedDate = dateFormatter.format(event.startDateTime)
-                var text = getString(R.string.event_all_day, formattedDate)
-                if (event.address != null) {
-                    text += "\n${getString(R.string.event_at, event.address)}"
-                }
-                text
-            }
-            is DateTimeEvent -> {
-                val dateFormatter = DateFormat.getDateTimeInstance()
-                val formattedStart = dateFormatter.format(event.startDateTime)
-                val formattedEnd = dateFormatter.format(event.endDateTime)
-                var text = getString(R.string.event_from, formattedStart)
-                text += "\n${getString(R.string.event_to, formattedEnd)}"
-                if (event.address != null) {
-                    text += "\n${getString(R.string.event_at, event.address)}"
-                }
-                text
-            }
+        val formatter =
+            if (event.isAllDay) DateFormat.getDateInstance() else DateFormat.getDateTimeInstance()
+        val formattedStart = formatter.format(event.startDateTime)
+        val formattedEnd = formatter.format(event.endDateTime)
+        var text = getString(R.string.event_from, formattedStart)
+        text += "\n${getString(R.string.event_to, formattedEnd)}"
+        event.extras.address?.let { address ->
+            text += "\n${getString(R.string.event_at, address)}"
         }
         return Notification.BigTextStyle().bigText(text)
     }
