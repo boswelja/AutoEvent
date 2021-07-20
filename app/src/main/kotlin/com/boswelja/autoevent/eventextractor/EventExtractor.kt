@@ -2,6 +2,7 @@ package com.boswelja.autoevent.eventextractor
 
 import android.content.Context
 import androidx.datastore.core.DataStore
+import com.boswelja.autoevent.common.secondOrNull
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.entityextraction.DateTimeEntity
 import com.google.mlkit.nl.entityextraction.Entity
@@ -69,32 +70,27 @@ class EventExtractor(
 
         val annotations = entityExtractor!!.annotate(params).await()
 
-        if (annotations.isEmpty()) return null
-
-        var startDate: Date? = null
-        var isAllDay = false
-
-        annotations.forEach { annotation ->
-            // TODO Handle cases where more than one event is found
-            annotation.entities.forEach { entity ->
-                when (entity.type) {
-                    Entity.TYPE_DATE_TIME -> {
-                        entity as DateTimeEntity
-                        isAllDay = entity.isAllDay()
-                        startDate = Date(entity.timestampMillis)
-                    }
-                }
+        val eventDates = annotations
+            .sortedBy { it.start }
+            .flatMap { annotation ->
+                annotation.entities.filterIsInstance<DateTimeEntity>()
             }
-        }
+            .takeLast(2)
 
-        return startDate?.let { startDateTime ->
-            Event(
-                startDateTime = startDateTime,
-                endDateTime = Date(estimateEndTimeMillis(startDateTime.time)),
-                isAllDay = isAllDay,
-                extras = extractExtrasFrom(text)
-            )
-        }
+        // Return now if no dates were found
+        if (eventDates.isEmpty()) return null
+
+        val isAllDay = eventDates.all { it.isAllDay() }
+        val dates = eventDates.map { Date(it.timestampMillis) }.sorted()
+        val startDate = dates.first()
+        val endDate = dates.secondOrNull() ?: Date(estimateEndTimeMillis(startDate.time))
+
+        return Event(
+            startDateTime = startDate,
+            endDateTime = endDate,
+            isAllDay = isAllDay,
+            extras = extractExtrasFrom(text)
+        )
     }
 
     private suspend fun extractExtrasFrom(text: String): Extras {
