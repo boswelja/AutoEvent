@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.boswelja.autoevent.eventextractor.ExtractorSettings
 import com.boswelja.autoevent.eventextractor.extractorSettingsDataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -47,6 +48,16 @@ class SettingsViewModel(
             extractorSettingsDataStore.updateData {
                 it.copy(
                     extractLocation = newValue
+                )
+            }
+        }
+    }
+
+    fun updateExtractLanguage(newValue: ExtractorSettings.ExtractorLanguage) {
+        viewModelScope.launch {
+            extractorSettingsDataStore.updateData {
+                it.copy(
+                    language = newValue
                 )
             }
         }

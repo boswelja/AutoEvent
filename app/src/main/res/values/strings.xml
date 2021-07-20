@@ -19,4 +19,10 @@
     <string name="event_noti_channel_name">Discovered Events</string>
     <string name="event_noti_title">Event Found</string>
     <string name="event_noti_summary">We found an event starting at %s</string>
+
+    <string name="language_detect" translatable="false">Auto (%s)</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="done">Done</string>
 </resources>
