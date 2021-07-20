@@ -80,10 +80,16 @@ class EventExtractor(
         // Return now if no dates were found
         if (eventDates.isEmpty()) return null
 
-        val isAllDay = eventDates.all { it.isAllDay() }
+        // Calculate start date
         val dates = eventDates.map { Date(it.timestampMillis) }.sorted()
         val startDate = dates.first()
+
+        // If start date is before the current date, return null
+        if (startDate < Date()) return null
+
+        // Calculate end date and whether the event is considered to be all-day
         val endDate = dates.secondOrNull() ?: Date(estimateEndTimeMillis(startDate.time))
+        val isAllDay = eventDates.all { it.isAllDay() }
 
         return Event(
             startDateTime = startDate,
