@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.io.Closeable
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -25,7 +26,7 @@ class EventExtractor(
     context: Context,
     private val settingsStore: DataStore<ExtractorSettings> = context.extractorSettingsDataStore,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
-) {
+) : Closeable {
 
     private val entityTypesFilter = mutableSetOf(Entity.TYPE_DATE_TIME)
 
@@ -53,7 +54,7 @@ class EventExtractor(
         }
     }
 
-    fun close() {
+    override fun close() {
         coroutineScope.cancel()
         entityExtractor?.close()
     }
