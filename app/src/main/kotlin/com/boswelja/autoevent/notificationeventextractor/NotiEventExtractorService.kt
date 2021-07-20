@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class NotiEventExtractorService : NotificationListenerService() {
 
+    private val notiIdMap = mutableMapOf<Int, Int>()
     private val idCounter = AtomicInteger()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -59,13 +60,15 @@ class NotiEventExtractorService : NotificationListenerService() {
                 sbn.notification.extras.getString(Notification.EXTRA_TEXT, "")
             }
             eventExtractor.extractEventFrom(text)?.let {
-                postEventNotification(it)
+                postEventNotification(it, sbn.id)
             }
         }
     }
 
-    private fun postEventNotification(eventDetails: Event) {
+    private fun postEventNotification(eventDetails: Event, sourceNotiId: Int) {
+        notiIdMap.remove(sourceNotiId)?.let { notificationManager.cancel(it) }
         val notificationId = idCounter.incrementAndGet()
+        notiIdMap[sourceNotiId] = notificationId
         val createEventIntent = Intent(Intent.ACTION_INSERT)
             .setData(CalendarContract.Events.CONTENT_URI)
             .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, eventDetails.startDateTime.time)
