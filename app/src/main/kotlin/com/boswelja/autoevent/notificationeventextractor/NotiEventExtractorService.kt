@@ -20,12 +20,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.text.DateFormat
-import java.util.concurrent.atomic.AtomicInteger
 
 class NotiEventExtractorService : NotificationListenerService() {
 
-    private val notiIdMap = mutableMapOf<Int, Int>()
-    private val idCounter = AtomicInteger()
+    private val notiIdMap = mutableMapOf<Int, Event>()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private lateinit var eventExtractor: EventExtractor
@@ -57,16 +55,21 @@ class NotiEventExtractorService : NotificationListenerService() {
                 Log.d("NotiEventExtractorService", "Got standard notification")
                 sbn.notification.extras.getString(Notification.EXTRA_TEXT, "")
             }
-            eventExtractor.extractEventFrom(text)?.let {
-                postEventNotification(it, sbn.id)
+            eventExtractor.extractEventFrom(text)?.let { event ->
+                // Only post notification if we haven't already got the same event info
+                val oldEventForNoti = notiIdMap[sbn.id]
+                if (oldEventForNoti != event) {
+                    // Cancel previous notification, update our map and post new notification
+                    oldEventForNoti?.let { notificationManager.cancel(it.hashCode()) }
+                    notiIdMap[sbn.id] = event
+                    postEventNotification(event)
+                }
             }
         }
     }
 
-    private fun postEventNotification(eventDetails: Event, sourceNotiId: Int) {
-        notiIdMap.remove(sourceNotiId)?.let { notificationManager.cancel(it) }
-        val notificationId = idCounter.incrementAndGet()
-        notiIdMap[sourceNotiId] = notificationId
+    private fun postEventNotification(eventDetails: Event) {
+        val notificationId = eventDetails.hashCode()
         val createEventIntent = Intent(Intent.ACTION_INSERT)
             .setData(CalendarContract.Events.CONTENT_URI)
             .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, eventDetails.startDateTime.time)
