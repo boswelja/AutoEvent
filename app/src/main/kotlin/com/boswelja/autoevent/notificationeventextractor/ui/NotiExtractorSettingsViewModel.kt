@@ -1,11 +1,11 @@
-package com.boswelja.autoevent.settings.ui
+package com.boswelja.autoevent.notificationeventextractor.ui
 
 import android.app.Application
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.AndroidViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class SettingsViewModel(
+class NotiExtractorSettingsViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
