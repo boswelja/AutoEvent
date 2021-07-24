@@ -3,8 +3,10 @@ package com.boswelja.autoevent.common.ui
 import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Shapes
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
@@ -12,7 +14,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+
+val shapes = Shapes(
+    small = RoundedCornerShape(50),
+    medium = RoundedCornerShape(18.dp),
+    large = RoundedCornerShape(24.dp)
+)
 
 @Composable
 fun getColors(darkTheme: Boolean): Colors {
@@ -89,6 +98,7 @@ private fun Context.getDarkSurfaceColor(): Color {
         Color(0xFF121212)
     }
 }
+
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -97,7 +107,8 @@ fun AppTheme(
     val systemUiController = rememberSystemUiController()
 
     MaterialTheme(
-        colors = getColors(darkTheme = darkTheme)
+        colors = getColors(darkTheme = darkTheme),
+        shapes = shapes
     ) {
         val statusBarColor = MaterialTheme.colors.background
         val navBarColor = MaterialTheme.colors.background
