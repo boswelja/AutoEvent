@@ -101,7 +101,7 @@ fun AppTheme(
         colors = getColors(darkTheme = darkTheme)
     ) {
         val statusBarColor = MaterialTheme.colors.primarySurface
-        val navBarColor = MaterialTheme.colors.surface
+        val navBarColor = MaterialTheme.colors.background
         LaunchedEffect(darkTheme) {
             systemUiController.setStatusBarColor(statusBarColor)
             systemUiController.setNavigationBarColor(navBarColor)
