@@ -72,7 +72,9 @@ fun <T> ConfirmationDialog(
         ) {
             Column {
                 Box(
-                    modifier = Modifier.height(64.dp).padding(start = 24.dp),
+                    modifier = Modifier
+                        .height(64.dp)
+                        .padding(start = 24.dp),
                     contentAlignment = Alignment.CenterStart
                 ) {
                     CompositionLocalProvider(
@@ -99,7 +101,9 @@ fun <T> ConfirmationDialog(
                 }
                 Divider()
                 Row(
-                    modifier = Modifier.padding(8.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
                 ) {
                     TextButton(onClick = onDismissRequest) {
