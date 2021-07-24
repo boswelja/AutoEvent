@@ -15,7 +15,10 @@ val Context.extractorSettingsDataStore: DataStore<ExtractorSettings> by dataStor
 object ExtractorSettingsSerializer : Serializer<ExtractorSettings> {
 
     override val defaultValue: ExtractorSettings = ExtractorSettings(
-        language = ExtractorSettings.ExtractorLanguage.DETECT
+        language = ExtractorSettings.ExtractorLanguage.DETECT,
+        extractLocation = true,
+        extractEmails = true,
+        ignoreAllDayEvents = false
     )
 
     override suspend fun readFrom(input: InputStream): ExtractorSettings {

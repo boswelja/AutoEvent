@@ -34,6 +34,7 @@ class EventExtractor(
 
     private val isReady = MutableStateFlow(false)
     private var entityExtractor: EntityExtractor? = null
+    private var ignoreAllDayEvents: Boolean = false
 
     init {
         coroutineScope.launch {
@@ -52,6 +53,7 @@ class EventExtractor(
                 } else {
                     extraTypeFilters.remove(Entity.TYPE_ADDRESS)
                 }
+                ignoreAllDayEvents = it.ignoreAllDayEvents
             }
         }
     }
@@ -75,6 +77,7 @@ class EventExtractor(
             .flatMap { annotation ->
                 annotation.entities.filterIsInstance<DateTimeEntity>()
             }
+            .filter { !ignoreAllDayEvents || !it.isAllDay() }
             .takeLast(2)
 
         // Return now if no dates were found
