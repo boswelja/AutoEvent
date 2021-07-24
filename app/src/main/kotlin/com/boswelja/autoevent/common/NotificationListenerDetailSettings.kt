@@ -1,4 +1,4 @@
-package com.boswelja.autoevent.settings
+package com.boswelja.autoevent.common
 
 import android.content.ComponentName
 import android.content.Context

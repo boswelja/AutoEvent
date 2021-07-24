@@ -17,8 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.boswelja.autoevent.R
+import com.boswelja.autoevent.common.NotificationListenerDetailSettings
 import com.boswelja.autoevent.notificationeventextractor.NotiEventExtractorService
-import com.boswelja.autoevent.settings.NotificationListenerDetailSettings
 
 @ExperimentalMaterialApi
 @Composable
