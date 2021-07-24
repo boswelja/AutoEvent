@@ -4,7 +4,6 @@ import android.content.ComponentName
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
@@ -17,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.common.NotificationListenerDetailSettings
@@ -42,7 +40,6 @@ fun NotiExtractorSettings(
     Column(modifier) {
         ListItem(
             modifier = Modifier
-                .padding(vertical = 8.dp)
                 .clickable {
                     listenerSettingsLauncher.launch(
                         ComponentName(context, NotiEventExtractorService::class.java)
