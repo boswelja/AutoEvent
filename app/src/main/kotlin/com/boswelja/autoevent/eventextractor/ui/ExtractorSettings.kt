@@ -1,11 +1,8 @@
-package com.boswelja.autoevent.settings.ui
+package com.boswelja.autoevent.eventextractor.ui
 
-import android.content.ComponentName
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Checkbox
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
@@ -14,89 +11,25 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddLocation
 import androidx.compose.material.icons.filled.AlternateEmail
 import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.ViewDay
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.common.ui.DialogPickerSetting
 import com.boswelja.autoevent.eventextractor.ExtractorSettings
-import com.boswelja.autoevent.notificationeventextractor.NotiEventExtractorService
-import com.boswelja.autoevent.settings.NotificationListenerDetailSettings
 import kotlinx.coroutines.Dispatchers
 import java.util.Locale
 
 @ExperimentalMaterialApi
-@Preview
 @Composable
-fun SettingsScreen(
+fun ExtractorSettings(
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
-    val viewModel: SettingsViewModel = viewModel()
-
-    val isServiceEnabled by viewModel.serviceEnabled.collectAsState(Dispatchers.IO)
-
-    val listenerSettingsLauncher = rememberLauncherForActivityResult(
-        NotificationListenerDetailSettings()
-    ) {
-        viewModel.updateServiceStatus()
-    }
-
-    Column(modifier) {
-        NotificationListenerSettings(
-            modifier = Modifier
-                .clickable {
-                    listenerSettingsLauncher.launch(
-                        ComponentName(context, NotiEventExtractorService::class.java)
-                    )
-                },
-            serviceEnabled = isServiceEnabled
-        )
-        Divider()
-        EventExtractorSettings()
-    }
-}
-
-@ExperimentalMaterialApi
-@Composable
-fun NotificationListenerSettings(
-    modifier: Modifier = Modifier,
-    serviceEnabled: Boolean
-) {
-    ListItem(
-        modifier = modifier,
-        text = {
-            Text(stringResource(R.string.noti_listener_settings_title))
-        },
-        secondaryText = {
-            val text = if (serviceEnabled) {
-                stringResource(R.string.noti_listener_settings_enabled_desc)
-            } else {
-                stringResource(R.string.noti_listener_settings_disabled_desc)
-            }
-            Text(text)
-        },
-        icon = {
-            Icon(
-                imageVector = Icons.Default.Notifications,
-                contentDescription = null
-            )
-        }
-    )
-}
-
-@ExperimentalMaterialApi
-@Composable
-fun EventExtractorSettings(
-    modifier: Modifier = Modifier
-) {
-    val viewModel: SettingsViewModel = viewModel()
+    val viewModel: ExtractorSettingsViewModel = viewModel()
     val language by viewModel.extractorLanguage.collectAsState(
         initial = ExtractorSettings.ExtractorLanguage.DETECT,
         context = Dispatchers.IO
@@ -109,25 +42,19 @@ fun EventExtractorSettings(
         initial = false,
         context = Dispatchers.IO
     )
+    val ignoreAllDayEvents by viewModel.ignoreAllDayEvents.collectAsState(
+        initial = false,
+        context = Dispatchers.IO
+    )
     Column(modifier) {
         DialogPickerSetting(
             items = ExtractorSettings.ExtractorLanguage.values(),
             selectedItem = language,
-            onItemSelected = {
-                viewModel.updateExtractLanguage(it)
-            },
-            itemContent = { item ->
-                Text(item.displayName())
-            },
-            text = {
-                Text("Language")
-            },
-            secondaryText = {
-                Text(language.displayName())
-            },
-            icon = {
-                Icon(Icons.Default.Language, null)
-            }
+            onItemSelected = { viewModel.updateExtractLanguage(it) },
+            itemContent = { Text(it.displayName()) },
+            text = { Text(stringResource(R.string.extractor_language_title)) },
+            secondaryText = { Text(language.displayName()) },
+            icon = { Icon(Icons.Default.Language, null) }
         )
         ListItem(
             modifier = Modifier.clickable { viewModel.updateExtractEmails(!extractEmails) },
@@ -140,6 +67,13 @@ fun EventExtractorSettings(
             text = { Text(stringResource(R.string.extract_address_settings_title)) },
             icon = { Icon(imageVector = Icons.Default.AddLocation, contentDescription = null) },
             trailing = { Checkbox(onCheckedChange = null, checked = extractAddress) }
+        )
+        ListItem(
+            modifier = Modifier.clickable { viewModel.updateAllDayEvents(!ignoreAllDayEvents) },
+            text = { Text(stringResource(R.string.extractor_ignore_allday_title)) },
+            secondaryText = { Text(stringResource(R.string.extractor_ignore_allday_summary)) },
+            icon = { Icon(Icons.Default.ViewDay, null) },
+            trailing = { Checkbox(onCheckedChange = null, checked = ignoreAllDayEvents) }
         )
     }
 }

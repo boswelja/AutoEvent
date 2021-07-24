@@ -10,7 +10,7 @@
         android:theme="@style/Theme.AutoEvent">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".main.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
