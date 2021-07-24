@@ -7,7 +7,6 @@ import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -100,7 +99,7 @@ fun AppTheme(
     MaterialTheme(
         colors = getColors(darkTheme = darkTheme)
     ) {
-        val statusBarColor = MaterialTheme.colors.primarySurface
+        val statusBarColor = MaterialTheme.colors.background
         val navBarColor = MaterialTheme.colors.background
         LaunchedEffect(darkTheme) {
             systemUiController.setStatusBarColor(statusBarColor)
