@@ -16,6 +16,7 @@ class ExtractorSettingsViewModel(
     val extractorLanguage = extractorSettingsDataStore.data.map { it.language }
     val extractEmails = extractorSettingsDataStore.data.map { it.extractEmails }
     val extractAddress = extractorSettingsDataStore.data.map { it.extractLocation }
+    val ignoreAllDayEvents = extractorSettingsDataStore.data.map { it.ignoreAllDayEvents }
 
     fun updateExtractEmails(newValue: Boolean) {
         viewModelScope.launch {
@@ -42,6 +43,16 @@ class ExtractorSettingsViewModel(
             extractorSettingsDataStore.updateData {
                 it.copy(
                     language = newValue
+                )
+            }
+        }
+    }
+
+    fun updateAllDayEvents(newValue: Boolean) {
+        viewModelScope.launch {
+            extractorSettingsDataStore.updateData {
+                it.copy(
+                    ignoreAllDayEvents = newValue
                 )
             }
         }
