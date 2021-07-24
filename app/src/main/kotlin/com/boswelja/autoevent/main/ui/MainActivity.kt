@@ -1,4 +1,4 @@
-package com.boswelja.autoevent
+package com.boswelja.autoevent.main.ui
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.boswelja.autoevent.R
 import com.boswelja.autoevent.common.ui.AppTheme
 import com.boswelja.autoevent.settings.ui.SettingsScreen
 
