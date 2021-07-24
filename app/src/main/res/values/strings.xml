@@ -13,6 +13,7 @@
 
     <string name="event_add_to_calendar">Add to Calendar</string>
 
+    <string name="noti_extractor_settings_title">Notification Listener Settings</string>
     <string name="extractor_settings_title">Extractor Settings</string>
     <string name="extractor_language_title">Language</string>
     <string name="extract_emails_settings_title">Extract Emails</string>
