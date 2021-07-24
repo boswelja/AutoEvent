@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddLocation
 import androidx.compose.material.icons.filled.AlternateEmail
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.ViewDay
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -41,6 +42,10 @@ fun ExtractorSettings(
         initial = false,
         context = Dispatchers.IO
     )
+    val ignoreAllDayEvents by viewModel.ignoreAllDayEvents.collectAsState(
+        initial = false,
+        context = Dispatchers.IO
+    )
     Column(modifier) {
         DialogPickerSetting(
             items = ExtractorSettings.ExtractorLanguage.values(),
@@ -62,6 +67,13 @@ fun ExtractorSettings(
             text = { Text(stringResource(R.string.extract_address_settings_title)) },
             icon = { Icon(imageVector = Icons.Default.AddLocation, contentDescription = null) },
             trailing = { Checkbox(onCheckedChange = null, checked = extractAddress) }
+        )
+        ListItem(
+            modifier = Modifier.clickable { viewModel.updateAllDayEvents(!ignoreAllDayEvents) },
+            text = { Text(stringResource(R.string.extractor_ignore_allday_title)) },
+            secondaryText = { Text(stringResource(R.string.extractor_ignore_allday_summary)) },
+            icon = { Icon(Icons.Default.ViewDay, null) },
+            trailing = { Checkbox(onCheckedChange = null, checked = ignoreAllDayEvents) }
         )
     }
 }

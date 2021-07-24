@@ -16,6 +16,8 @@
     <string name="noti_extractor_settings_title">Notification Listener Settings</string>
     <string name="extractor_settings_title">Extractor Settings</string>
     <string name="extractor_language_title">Language</string>
+    <string name="extractor_ignore_allday_title">Ignore All-Day Events</string>
+    <string name="extractor_ignore_allday_summary">Ignore events that don\'t have a time</string>
     <string name="extract_emails_settings_title">Extract Emails</string>
     <string name="extract_address_settings_title">Extract Address</string>
 
