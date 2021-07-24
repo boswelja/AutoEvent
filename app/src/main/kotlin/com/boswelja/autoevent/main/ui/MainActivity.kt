@@ -10,9 +10,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.common.ui.AppTheme
-import com.boswelja.autoevent.settings.ui.SettingsScreen
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,8 +31,8 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
                 ) {
-                    SettingsScreen(
-                        modifier = Modifier.padding(it)
+                    MainScreen(
+                        modifier = Modifier.padding(it).padding(16.dp)
                     )
                 }
             }

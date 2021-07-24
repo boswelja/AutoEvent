@@ -1,23 +1,24 @@
-package com.boswelja.autoevent.settings.ui
+package com.boswelja.autoevent.main.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.boswelja.autoevent.eventextractor.ui.ExtractorSettings
 import com.boswelja.autoevent.notificationeventextractor.ui.NotiExtractorSettings
 
 @ExperimentalMaterialApi
-@Preview
 @Composable
-fun SettingsScreen(
+fun MainScreen(
     modifier: Modifier = Modifier
 ) {
-    Column(modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
         NotiExtractorSettings()
-        Divider()
         ExtractorSettings()
     }
 }
