@@ -2,11 +2,7 @@ package com.boswelja.autoevent.eventextractor.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
@@ -20,10 +16,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.boswelja.autoevent.R
-import com.boswelja.autoevent.common.ui.CardHeader
 import com.boswelja.autoevent.common.ui.DialogPickerSetting
 import com.boswelja.autoevent.eventextractor.ExtractorSettings
 import kotlinx.coroutines.Dispatchers
@@ -47,36 +41,28 @@ fun ExtractorSettings(
         initial = false,
         context = Dispatchers.IO
     )
-    Card(modifier) {
-        Column {
-            CardHeader(
-                title = { Text(stringResource(R.string.extractor_settings_title)) }
-            )
-            Divider()
-            Spacer(Modifier.height(8.dp))
-            DialogPickerSetting(
-                items = ExtractorSettings.ExtractorLanguage.values(),
-                selectedItem = language,
-                onItemSelected = { viewModel.updateExtractLanguage(it) },
-                itemContent = { Text(it.displayName()) },
-                text = { Text(stringResource(R.string.extractor_language_title)) },
-                secondaryText = { Text(language.displayName()) },
-                icon = { Icon(Icons.Default.Language, null) }
-            )
-            ListItem(
-                modifier = Modifier.clickable { viewModel.updateExtractEmails(!extractEmails) },
-                text = { Text(stringResource(R.string.extract_emails_settings_title)) },
-                icon = { Icon(imageVector = Icons.Default.AlternateEmail, contentDescription = null) },
-                trailing = { Checkbox(onCheckedChange = null, checked = extractEmails) }
-            )
-            ListItem(
-                modifier = Modifier.clickable { viewModel.updateExtractAddress(!extractAddress) },
-                text = { Text(stringResource(R.string.extract_address_settings_title)) },
-                icon = { Icon(imageVector = Icons.Default.AddLocation, contentDescription = null) },
-                trailing = { Checkbox(onCheckedChange = null, checked = extractAddress) }
-            )
-            Spacer(Modifier.height(8.dp))
-        }
+    Column(modifier) {
+        DialogPickerSetting(
+            items = ExtractorSettings.ExtractorLanguage.values(),
+            selectedItem = language,
+            onItemSelected = { viewModel.updateExtractLanguage(it) },
+            itemContent = { Text(it.displayName()) },
+            text = { Text(stringResource(R.string.extractor_language_title)) },
+            secondaryText = { Text(language.displayName()) },
+            icon = { Icon(Icons.Default.Language, null) }
+        )
+        ListItem(
+            modifier = Modifier.clickable { viewModel.updateExtractEmails(!extractEmails) },
+            text = { Text(stringResource(R.string.extract_emails_settings_title)) },
+            icon = { Icon(imageVector = Icons.Default.AlternateEmail, contentDescription = null) },
+            trailing = { Checkbox(onCheckedChange = null, checked = extractEmails) }
+        )
+        ListItem(
+            modifier = Modifier.clickable { viewModel.updateExtractAddress(!extractAddress) },
+            text = { Text(stringResource(R.string.extract_address_settings_title)) },
+            icon = { Icon(imageVector = Icons.Default.AddLocation, contentDescription = null) },
+            trailing = { Checkbox(onCheckedChange = null, checked = extractAddress) }
+        )
     }
 }
 

@@ -5,8 +5,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
@@ -23,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.common.NotificationListenerDetailSettings
-import com.boswelja.autoevent.common.ui.CardHeader
 import com.boswelja.autoevent.notificationeventextractor.NotiEventExtractorService
 
 @ExperimentalMaterialApi
@@ -42,38 +39,32 @@ fun NotiExtractorSettings(
 
     val serviceEnabled by viewModel.serviceEnabled.collectAsState()
 
-    Card(modifier) {
-        Column {
-            CardHeader(
-                title = { Text(stringResource(R.string.noti_extractor_settings_title)) }
-            )
-            Divider()
-            ListItem(
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .clickable {
-                        listenerSettingsLauncher.launch(
-                            ComponentName(context, NotiEventExtractorService::class.java)
-                        )
-                    },
-                text = {
-                    Text(stringResource(R.string.noti_listener_settings_title))
-                },
-                secondaryText = {
-                    val text = if (serviceEnabled) {
-                        stringResource(R.string.noti_listener_settings_enabled_desc)
-                    } else {
-                        stringResource(R.string.noti_listener_settings_disabled_desc)
-                    }
-                    Text(text)
-                },
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.Notifications,
-                        contentDescription = null
+    Column(modifier) {
+        ListItem(
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .clickable {
+                    listenerSettingsLauncher.launch(
+                        ComponentName(context, NotiEventExtractorService::class.java)
                     )
+                },
+            text = {
+                Text(stringResource(R.string.noti_listener_settings_title))
+            },
+            secondaryText = {
+                val text = if (serviceEnabled) {
+                    stringResource(R.string.noti_listener_settings_enabled_desc)
+                } else {
+                    stringResource(R.string.noti_listener_settings_disabled_desc)
                 }
-            )
-        }
+                Text(text)
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Notifications,
+                    contentDescription = null
+                )
+            }
+        )
     }
 }
