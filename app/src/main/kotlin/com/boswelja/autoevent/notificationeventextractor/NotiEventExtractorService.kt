@@ -9,7 +9,6 @@ import android.graphics.drawable.Icon
 import android.provider.CalendarContract
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import com.boswelja.autoevent.R
@@ -18,6 +17,8 @@ import com.boswelja.autoevent.eventextractor.EventExtractor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 
@@ -26,35 +27,32 @@ class NotiEventExtractorService : NotificationListenerService() {
     private val notiIdMap = mutableMapOf<Int, Event>()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
+    private var ignoredPackages: List<String> = emptyList()
+
     private lateinit var eventExtractor: EventExtractor
     private lateinit var notificationManager: NotificationManager
 
     override fun onListenerConnected() {
-        Log.i("NotiEventExtractorService", "Listener connected")
         eventExtractor = EventExtractor(this@NotiEventExtractorService)
         notificationManager = getSystemService()!!
         createNotificationChannel()
+        coroutineScope.launch {
+            notiExtractorSettingsStore.data.map { it.blocklist }.collect {
+                ignoredPackages = it
+            }
+        }
     }
 
     override fun onListenerDisconnected() {
-        Log.i("NotiListenerService", "Listener disconnected")
         coroutineScope.cancel()
         eventExtractor.close()
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         if (sbn == null) return
-        Log.d("NotiEventExtractorService", "Got notification")
+        if (ignoredPackages.contains(sbn.packageName)) return
         coroutineScope.launch {
-            val messageStyle = NotificationCompat.MessagingStyle
-                .extractMessagingStyleFromNotification(sbn.notification)
-            val text = if (messageStyle != null) {
-                Log.d("NotiEventExtractorService", "Got MessageStyle notification")
-                messageStyle.messages.filter { !it.text.isNullOrBlank() }.joinToString { it.text!! }
-            } else {
-                Log.d("NotiEventExtractorService", "Got standard notification")
-                sbn.notification.extras.getString(Notification.EXTRA_TEXT, "")
-            }
+            val text = sbn.notification.allText()
             eventExtractor.extractEventFrom(text)?.let { event ->
                 // Only post notification if we haven't already got the same event info
                 val oldEventForNoti = notiIdMap[sbn.id]
@@ -66,6 +64,15 @@ class NotiEventExtractorService : NotificationListenerService() {
                 }
             }
         }
+    }
+
+    private fun Notification.allText(): String {
+        val messageStyle = NotificationCompat.MessagingStyle
+            .extractMessagingStyleFromNotification(this)
+        val messageStyleText = messageStyle?.messages
+            ?.filter { !it.text.isNullOrBlank() }
+            ?.joinToString { it.text!! }
+        return messageStyleText ?: extras.getString(Notification.EXTRA_TEXT, "")
     }
 
     private fun postEventNotification(eventDetails: Event) {
