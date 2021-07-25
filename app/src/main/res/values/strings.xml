@@ -15,6 +15,7 @@
 
     <string name="noti_extractor_settings_title">Notification Listener Settings</string>
     <string name="noti_extractor_blocklist_title">Blocklist</string>
+    <string name="noti_extractor_blocklist_none">Not ignoring notifications from any app</string>
     <string name="extractor_settings_title">Extractor Settings</string>
     <string name="extractor_language_title">Language</string>
     <string name="extractor_ignore_allday_title">Ignore All-Day Events</string>
@@ -31,4 +32,5 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="done">Done</string>
+    <string name="remove">Remove</string>
 </resources>
