@@ -35,7 +35,9 @@ class MainActivity : AppCompatActivity() {
                     }
                 ) {
                     MainScreen(
-                        modifier = Modifier.padding(it).padding(16.dp)
+                        modifier = Modifier
+                            .padding(it)
+                            .padding(16.dp)
                     )
                 }
             }
