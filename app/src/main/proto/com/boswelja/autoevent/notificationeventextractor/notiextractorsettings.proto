@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+option java_package = "com.boswelja.autoevent.notificationeventextractor";
+
+message NotiExtractorSettings {
+    repeated string blocklist = 1;
+}
