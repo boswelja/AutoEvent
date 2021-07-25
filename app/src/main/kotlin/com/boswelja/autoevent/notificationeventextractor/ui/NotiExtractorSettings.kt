@@ -1,7 +1,10 @@
 package com.boswelja.autoevent.notificationeventextractor.ui
 
 import android.content.ComponentName
-import androidx.activity.compose.rememberLauncherForActivityResult
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -25,7 +28,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.boswelja.autoevent.R
-import com.boswelja.autoevent.common.NotificationListenerDetailSettings
 import com.boswelja.autoevent.common.ui.AnimatedVisibilityItem
 import com.boswelja.autoevent.common.ui.ListDialog
 import com.boswelja.autoevent.notificationeventextractor.NotiEventExtractorService
@@ -40,21 +42,13 @@ fun NotiExtractorSettings(
     val context = LocalContext.current
     val viewModel: NotiExtractorSettingsViewModel = viewModel()
 
-    val listenerSettingsLauncher = rememberLauncherForActivityResult(
-        NotificationListenerDetailSettings()
-    ) {
-        viewModel.updateServiceStatus()
-    }
-
-    val serviceEnabled by viewModel.serviceEnabled.collectAsState()
+    val serviceEnabled by viewModel.serviceEnabled.collectAsState(false, Dispatchers.IO)
     val blocklist by viewModel.blocklist.collectAsState(emptyList(), Dispatchers.IO)
 
     Column(modifier) {
         ListItem(
             modifier = Modifier.clickable {
-                listenerSettingsLauncher.launch(
-                    ComponentName(context, NotiEventExtractorService::class.java)
-                )
+                launchNotiListenerSettings(context)
             },
             text = { Text(stringResource(R.string.noti_listener_settings_title)) },
             secondaryText = {
@@ -142,4 +136,17 @@ fun BlocklistSetting(
             items = list
         )
     }
+}
+
+private fun launchNotiListenerSettings(context: Context) {
+    val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        Intent(Settings.ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS)
+            .putExtra(
+                Settings.EXTRA_NOTIFICATION_LISTENER_COMPONENT_NAME,
+                ComponentName(context, NotiEventExtractorService::class.java).flattenToString()
+            )
+    } else {
+        Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+    }
+    context.startActivity(intent)
 }
