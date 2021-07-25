@@ -11,6 +11,7 @@
     <string name="event_at">At %s</string>
     <string name="event_all_day">All Day %s</string>
 
+    <string name="event_ignore_for_app">Ignore this App</string>
     <string name="event_add_to_calendar">Add to Calendar</string>
 
     <string name="noti_extractor_settings_title">Notification Listener Settings</string>

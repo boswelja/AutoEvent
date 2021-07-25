@@ -60,7 +60,7 @@ class NotiEventExtractorService : NotificationListenerService() {
                     // Cancel previous notification, update our map and post new notification
                     oldEventForNoti?.let { notificationManager.cancel(it.hashCode()) }
                     notiIdMap[sbn.id] = event
-                    postEventNotification(event)
+                    postEventNotification(event, sbn.packageName)
                 }
             }
         }
@@ -75,7 +75,7 @@ class NotiEventExtractorService : NotificationListenerService() {
         return messageStyleText ?: extras.getString(Notification.EXTRA_TEXT, "")
     }
 
-    private fun postEventNotification(eventDetails: Event) {
+    private fun postEventNotification(eventDetails: Event, packageName: String) {
         val notificationId = eventDetails.hashCode()
         val createEventIntent = Intent(Intent.ACTION_INSERT)
             .setData(CalendarContract.Events.CONTENT_URI)
@@ -84,6 +84,13 @@ class NotiEventExtractorService : NotificationListenerService() {
             .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, eventDetails.endDateTime.time)
         val createPendingIntent = PendingIntent.getActivity(
             this, notificationId, createEventIntent, PendingIntent.FLAG_IMMUTABLE
+        )
+        val ignoreAppIntent = Intent(this, NotiActionHandler::class.java)
+            .setAction(NotiActionHandler.IGNORE_PACKAGE_ACTION)
+            .putExtra(NotiActionHandler.EXTRA_NOTIFICATION_ID, notificationId)
+            .putExtra(NotiActionHandler.EXTRA_PACKAGE_NAME, packageName)
+        val ignoreAppPendingIntent = PendingIntent.getBroadcast(
+            this, notificationId, ignoreAppIntent, PendingIntent.FLAG_IMMUTABLE
         )
 
         val dateFormatter = DateFormat.getDateTimeInstance()
@@ -99,6 +106,13 @@ class NotiEventExtractorService : NotificationListenerService() {
                     Icon.createWithResource(this, R.drawable.noti_ic_event_add),
                     getString(R.string.event_add_to_calendar),
                     createPendingIntent
+                ).build()
+            )
+            .addAction(
+                Notification.Action.Builder(
+                    Icon.createWithResource(this, R.drawable.noti_ic_event_block),
+                    getString(R.string.event_ignore_for_app),
+                    ignoreAppPendingIntent
                 ).build()
             )
             .build()

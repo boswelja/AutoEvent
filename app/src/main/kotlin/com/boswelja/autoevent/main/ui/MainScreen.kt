@@ -1,5 +1,6 @@
 package com.boswelja.autoevent.main.ui
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.ExperimentalMaterialApi
@@ -12,6 +13,7 @@ import com.boswelja.autoevent.R
 import com.boswelja.autoevent.eventextractor.ui.ExtractorSettings
 import com.boswelja.autoevent.notificationeventextractor.ui.NotiExtractorSettings
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun MainScreen(
@@ -26,6 +28,7 @@ fun MainScreen(
     }
 }
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun NotiExtractorCard(

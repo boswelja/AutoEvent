@@ -34,6 +34,14 @@
                 android:name="android.service.notification.disabled_filter_types"
                 android:value="ongoing,silent" />
         </service>
+
+        <receiver
+            android:name=".notificationeventextractor.NotiActionHandler"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.boswelja.autoevent.IGNORE_PACKAGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
