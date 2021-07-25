@@ -37,6 +37,7 @@ class NotiEventExtractorService : NotificationListenerService() {
         notificationManager = getSystemService()!!
         createNotificationChannel()
         coroutineScope.launch {
+            notiExtractorSettingsStore.updateData { it.copy(running = true) }
             notiExtractorSettingsStore.data.map { it.blocklist }.collect {
                 ignoredPackages = it
             }
@@ -44,8 +45,11 @@ class NotiEventExtractorService : NotificationListenerService() {
     }
 
     override fun onListenerDisconnected() {
-        coroutineScope.cancel()
-        eventExtractor.close()
+        coroutineScope.launch {
+            notiExtractorSettingsStore.updateData { it.copy(running = false) }
+            eventExtractor.close()
+            coroutineScope.cancel()
+        }
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {

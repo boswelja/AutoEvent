@@ -14,6 +14,7 @@ val Context.notiExtractorSettingsStore: DataStore<NotiExtractorSettings> by data
 
 object NotiExtractorSettingsSerializer : Serializer<NotiExtractorSettings> {
     override val defaultValue: NotiExtractorSettings = NotiExtractorSettings(
+        running = false,
         blocklist = emptyList()
     )
 
