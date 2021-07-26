@@ -1,5 +1,6 @@
 package com.boswelja.autoevent.main.ui
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.ExperimentalMaterialApi
@@ -12,32 +13,39 @@ import com.boswelja.autoevent.R
 import com.boswelja.autoevent.eventextractor.ui.ExtractorSettings
 import com.boswelja.autoevent.notificationeventextractor.ui.NotiExtractorSettings
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun MainScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigate: (Destinations) -> Unit
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        NotiExtractorCard()
+        NotiExtractorCard(
+            onNavigate = onNavigate
+        )
         ExtractorSettingsCard()
     }
 }
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun NotiExtractorCard(
     modifier: Modifier = Modifier,
-    contentModifier: Modifier = Modifier
+    contentModifier: Modifier = Modifier,
+    onNavigate: (Destinations) -> Unit
 ) {
     MainCardItem(
         modifier = modifier,
         title = { Text(stringResource(R.string.noti_extractor_settings_title)) }
     ) {
         NotiExtractorSettings(
-            modifier = contentModifier
+            modifier = contentModifier,
+            onNavigate = onNavigate
         )
     }
 }

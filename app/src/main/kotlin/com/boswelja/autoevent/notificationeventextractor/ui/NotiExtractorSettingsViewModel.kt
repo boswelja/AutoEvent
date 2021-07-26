@@ -1,25 +1,16 @@
 package com.boswelja.autoevent.notificationeventextractor.ui
 
 import android.app.Application
-import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.AndroidViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.boswelja.autoevent.notificationeventextractor.notiExtractorSettingsStore
+import kotlinx.coroutines.flow.map
 
 class NotiExtractorSettingsViewModel(
     application: Application
 ) : AndroidViewModel(application) {
 
-    val serviceEnabled = MutableStateFlow(false)
+    private val dataStore = application.notiExtractorSettingsStore
 
-    init {
-        updateServiceStatus()
-    }
-
-    fun updateServiceStatus() {
-        val context = getApplication<Application>()
-        val isServiceEnabled = NotificationManagerCompat
-            .getEnabledListenerPackages(context)
-            .contains(context.packageName)
-        serviceEnabled.tryEmit(isServiceEnabled)
-    }
+    val serviceEnabled = dataStore.data.map { it.running }
+    val blocklistCount = dataStore.data.map { it.blocklist.count() }
 }

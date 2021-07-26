@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="noti_extractor_blocklist_summary">
+        <item quantity="other">Ignoring notifications from %s apps</item>
+        <item quantity="one">Ignoring notifications from %s app</item>
+    </plurals>
+</resources>

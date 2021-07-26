@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.boswelja.autoevent">
+
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
 
     <application
         android:allowBackup="true"
@@ -34,6 +40,14 @@
                 android:name="android.service.notification.disabled_filter_types"
                 android:value="ongoing,silent" />
         </service>
+
+        <receiver
+            android:name=".notificationeventextractor.NotiActionHandler"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.boswelja.autoevent.IGNORE_PACKAGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
