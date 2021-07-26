@@ -17,13 +17,16 @@ import com.boswelja.autoevent.notificationeventextractor.ui.NotiExtractorSetting
 @ExperimentalMaterialApi
 @Composable
 fun MainScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigate: (Destinations) -> Unit
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        NotiExtractorCard()
+        NotiExtractorCard(
+            onNavigate = onNavigate
+        )
         ExtractorSettingsCard()
     }
 }
@@ -33,14 +36,16 @@ fun MainScreen(
 @Composable
 fun NotiExtractorCard(
     modifier: Modifier = Modifier,
-    contentModifier: Modifier = Modifier
+    contentModifier: Modifier = Modifier,
+    onNavigate: (Destinations) -> Unit
 ) {
     MainCardItem(
         modifier = modifier,
         title = { Text(stringResource(R.string.noti_extractor_settings_title)) }
     ) {
         NotiExtractorSettings(
-            modifier = contentModifier
+            modifier = contentModifier,
+            onNavigate = onNavigate
         )
     }
 }
