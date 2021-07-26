@@ -69,7 +69,10 @@ class BlocklistViewModel(
     fun addToBlocklist(packageName: String) {
         viewModelScope.launch {
             dataStore.updateData {
-                val newList = it.blocklist + packageName
+                val newList = it.blocklist.toMutableList()
+                if (!newList.contains(packageName)) {
+                    newList += packageName
+                }
                 it.copy(blocklist = newList)
             }
         }
