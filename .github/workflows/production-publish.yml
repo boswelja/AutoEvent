@@ -1,0 +1,19 @@
+name: Promote latest to Production
+
+on:
+  workflow_dispatch
+
+jobs:
+  promote:
+    name: Promote latest release to production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Promote GitHub release to production
+        uses: boswelja/promote-prerelease-action@main
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Promote Google Play release to production
+        uses: boswelja/promote-play-beta-action@main
+        with:
+          service-account-json-raw: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          package-name: com.boswelja.contactringtonegenerator
