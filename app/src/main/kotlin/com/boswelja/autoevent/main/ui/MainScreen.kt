@@ -3,6 +3,8 @@ package com.boswelja.autoevent.main.ui
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,8 +23,9 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     onNavigate: (Destinations) -> Unit
 ) {
+    val scrollState = rememberScrollState()
     Column(
-        modifier = modifier,
+        modifier = modifier.verticalScroll(state = scrollState),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         NotiExtractorCard(
