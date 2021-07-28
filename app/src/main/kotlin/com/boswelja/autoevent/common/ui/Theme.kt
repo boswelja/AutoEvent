@@ -71,7 +71,7 @@ private fun Context.getLightBackgroundColor(): Color {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         Color(getColor(android.R.color.system_neutral1_50))
     } else {
-        Color.White
+        Color(0xFFFBE9E7)
     }
 }
 
@@ -87,7 +87,7 @@ private fun Context.getDarkBackgroundColor(): Color {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         Color(getColor(android.R.color.system_neutral1_900))
     } else {
-        Color(0xFF121212)
+        Color(0xFF212121)
     }
 }
 
@@ -95,7 +95,7 @@ private fun Context.getDarkSurfaceColor(): Color {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         Color(getColor(android.R.color.system_neutral1_900))
     } else {
-        Color(0xFF121212)
+        Color(0xFF212121)
     }
 }
 
