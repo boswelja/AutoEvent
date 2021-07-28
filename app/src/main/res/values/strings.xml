@@ -31,6 +31,9 @@
 
     <string name="language_detect" translatable="false">Auto (%s)</string>
 
+    <string name="support_app_title">Like the app?</string>
+    <string name="rate_app">Rate &amp; Review</string>
+
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="done">Done</string>
