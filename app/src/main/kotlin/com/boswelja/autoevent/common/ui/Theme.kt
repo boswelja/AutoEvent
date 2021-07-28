@@ -17,6 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+const val useMonet = true
+
 val shapes = Shapes(
     small = RoundedCornerShape(50),
     medium = RoundedCornerShape(18.dp),
@@ -52,7 +54,7 @@ fun getColors(darkTheme: Boolean): Colors {
 }
 
 private fun Context.getDarkPrimaryColor(): Color {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    return if (useMonet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         Color(getColor(android.R.color.system_accent1_200))
     } else {
         Color(0xffffab91)
@@ -60,7 +62,7 @@ private fun Context.getDarkPrimaryColor(): Color {
 }
 
 private fun Context.getLightPrimaryColor(): Color {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    return if (useMonet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         Color(getColor(android.R.color.system_accent1_500))
     } else {
         Color(0xffff5722)
@@ -68,7 +70,7 @@ private fun Context.getLightPrimaryColor(): Color {
 }
 
 private fun Context.getLightBackgroundColor(): Color {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    return if (useMonet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         Color(getColor(android.R.color.system_neutral1_50))
     } else {
         Color(0xFFFBE9E7)
@@ -76,7 +78,7 @@ private fun Context.getLightBackgroundColor(): Color {
 }
 
 private fun Context.getLightSurfaceColor(): Color {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    return if (useMonet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         Color(getColor(android.R.color.system_neutral1_10))
     } else {
         Color.White
@@ -92,7 +94,7 @@ private fun Context.getDarkBackgroundColor(): Color {
 }
 
 private fun Context.getDarkSurfaceColor(): Color {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    return if (useMonet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         Color(getColor(android.R.color.system_neutral1_900))
     } else {
         Color(0xFF212121)
