@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.eventextractor.ui.ExtractorSettings
 import com.boswelja.autoevent.notificationeventextractor.ui.NotiExtractorSettings
+import com.boswelja.autoevent.support.ui.SupportOptions
 
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
@@ -28,6 +29,7 @@ fun MainScreen(
             onNavigate = onNavigate
         )
         ExtractorSettingsCard()
+        SupportAppCard()
     }
 }
 
@@ -63,5 +65,19 @@ fun ExtractorSettingsCard(
         ExtractorSettings(
             modifier = contentModifier
         )
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun SupportAppCard(
+    modifier: Modifier = Modifier,
+    contentModifier: Modifier = Modifier
+) {
+    MainCardItem(
+        modifier = modifier,
+        title = { Text(stringResource(R.string.support_app_title)) }
+    ) {
+        SupportOptions(modifier = contentModifier)
     }
 }
