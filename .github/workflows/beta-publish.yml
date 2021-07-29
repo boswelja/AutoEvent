@@ -36,8 +36,8 @@ jobs:
         with:
           path: ./**/build/
           key: ${{ runner.os }}-build-${{ github.sha }}
-      - name: Build Release Artifacts
-        run: ./gradlew :mobile:bundleRelease
+      - name: Build Release Artifact
+        run: ./gradlew :app:bundleRelease
         env:
           VERSION_NAME: ${{ steps.version.outputs.version }}
       - name: Sign Release
