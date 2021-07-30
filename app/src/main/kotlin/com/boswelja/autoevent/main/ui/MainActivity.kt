@@ -7,6 +7,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
@@ -98,11 +99,14 @@ fun NavigationScreen(
     ) {
         composable(Destinations.HOME.name) {
             MainScreen(
+                modifier = Modifier.fillMaxSize(),
                 onNavigate = { navController.navigate(it.name) }
             )
         }
         composable(Destinations.BLOCKLIST.name) {
-            BlocklistScreen()
+            BlocklistScreen(
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 }
