@@ -2,9 +2,10 @@
     <string name="app_name">AutoEvent</string>
     <string name="noti_listener_label">Notification Event Extractor</string>
 
-    <string name="noti_listener_settings_title">Notification Access Settings</string>
+    <string name="noti_listener_settings_title">Notification Access</string>
     <string name="noti_listener_settings_disabled_desc">We need access to your notifications before we can continue</string>
     <string name="noti_listener_settings_enabled_desc">Manage what we can access</string>
+    <string name="noti_listener_access_summary">AutoEvent relies on having access to your notifications. This is to scan notification text for possible events.</string>
 
     <string name="event_from">Starting %s</string>
     <string name="event_to">Finishing %s</string>
@@ -34,6 +35,7 @@
     <string name="support_app_title">Like the app?</string>
     <string name="rate_app">Rate &amp; Review</string>
 
+    <string name="grant">Grant</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="done">Done</string>
