@@ -34,6 +34,10 @@
     <string name="support_app_title">Like the app?</string>
     <string name="rate_app">Rate &amp; Review</string>
 
+    <string name="duration_picker_hours">Hours</string>
+    <string name="duration_picker_minutes">Minutes</string>
+
+    <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="done">Done</string>
