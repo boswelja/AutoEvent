@@ -6,6 +6,7 @@ import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
 import java.io.InputStream
 import java.io.OutputStream
+import java.util.concurrent.TimeUnit
 
 val Context.extractorSettingsDataStore: DataStore<ExtractorSettings> by dataStore(
     fileName = "extractorsettings.pb",
@@ -18,7 +19,8 @@ object ExtractorSettingsSerializer : Serializer<ExtractorSettings> {
         language = ExtractorSettings.ExtractorLanguage.DETECT,
         extractLocation = true,
         extractEmails = true,
-        ignoreAllDayEvents = false
+        ignoreAllDayEvents = false,
+        defaultEventDuration = TimeUnit.MINUTES.toMillis(30)
     )
 
     override suspend fun readFrom(input: InputStream): ExtractorSettings {
