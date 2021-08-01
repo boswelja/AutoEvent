@@ -14,7 +14,6 @@ import androidx.core.content.getSystemService
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.eventextractor.Event
 import com.boswelja.autoevent.eventextractor.EventExtractor
-import java.text.DateFormat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -98,14 +97,10 @@ class NotiEventExtractorService : NotificationListenerService() {
             this, notificationId, ignoreAppIntent, PendingIntent.FLAG_IMMUTABLE
         )
 
-        val dateFormatter = DateFormat.getDateTimeInstance()
-        val formattedStart = dateFormatter.format(eventDetails.startDateTime.time)
-
         val notification = Notification.Builder(this, EventDetailsChannel)
             .setContentTitle(getString(R.string.event_noti_title))
-            .setContentText(getString(R.string.event_noti_summary, formattedStart))
+            .setContentText("Haha text go brrrr")
             .setSmallIcon(R.drawable.noti_ic_event_found)
-            .setStyle(createNotificationStyleForEvent(eventDetails))
             .setContentIntent(createPendingIntent)
             .addAction(
                 Notification.Action.Builder(
@@ -117,19 +112,6 @@ class NotiEventExtractorService : NotificationListenerService() {
             .build()
 
         notificationManager.notify(notificationId, notification)
-    }
-
-    private fun createNotificationStyleForEvent(event: Event): Notification.Style {
-        val formatter =
-            if (event.isAllDay) DateFormat.getDateInstance() else DateFormat.getDateTimeInstance()
-        val formattedStart = formatter.format(event.startDateTime)
-        val formattedEnd = formatter.format(event.endDateTime)
-        var text = getString(R.string.event_from, formattedStart)
-        text += "\n${getString(R.string.event_to, formattedEnd)}"
-        event.extras.address?.let { address ->
-            text += "\n${getString(R.string.event_at, address)}"
-        }
-        return Notification.BigTextStyle().bigText(text)
     }
 
     private fun createNotificationChannel() {

@@ -7,10 +7,6 @@
     <string name="noti_listener_settings_enabled_desc">Manage what we can access</string>
     <string name="noti_listener_access_summary">AutoEvent relies on having access to your notifications. This is to scan notification text for possible events.</string>
 
-    <string name="event_from">Starting %s</string>
-    <string name="event_to">Finishing %s</string>
-    <string name="event_at">At %s</string>
-
     <string name="event_ignore_for_app">Ignore this App</string>
 
     <string name="noti_extractor_settings_title">Notification Listener Settings</string>
@@ -25,7 +21,6 @@
 
     <string name="event_noti_channel_name">Discovered Events</string>
     <string name="event_noti_title">Event Found</string>
-    <string name="event_noti_summary">We found an event starting at %s</string>
 
     <string name="language_detect" translatable="false">Auto (%s)</string>
 
