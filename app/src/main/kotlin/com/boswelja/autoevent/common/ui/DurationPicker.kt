@@ -117,7 +117,7 @@ internal fun DurationInput(
     )
 }
 
-private fun getHourAndMinuteFromMillis(millis: Long): Pair<Long, Long> {
+fun getHourAndMinuteFromMillis(millis: Long): Pair<Long, Long> {
     val hours = TimeUnit.MILLISECONDS.toHours(millis)
     val minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60
     return Pair(hours, minutes)

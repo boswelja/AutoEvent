@@ -17,44 +17,35 @@ class ExtractorSettingsViewModel(
     val extractEmails = extractorSettingsDataStore.data.map { it.extractEmails }
     val extractAddress = extractorSettingsDataStore.data.map { it.extractLocation }
     val ignoreAllDayEvents = extractorSettingsDataStore.data.map { it.ignoreAllDayEvents }
+    val defaultDuration = extractorSettingsDataStore.data.map { it.defaultEventDuration }
 
     fun updateExtractEmails(newValue: Boolean) {
         viewModelScope.launch {
-            extractorSettingsDataStore.updateData {
-                it.copy(
-                    extractEmails = newValue
-                )
-            }
+            extractorSettingsDataStore.updateData { it.copy(extractEmails = newValue) }
         }
     }
 
     fun updateExtractAddress(newValue: Boolean) {
         viewModelScope.launch {
-            extractorSettingsDataStore.updateData {
-                it.copy(
-                    extractLocation = newValue
-                )
-            }
+            extractorSettingsDataStore.updateData { it.copy(extractLocation = newValue) }
         }
     }
 
     fun updateExtractLanguage(newValue: ExtractorSettings.ExtractorLanguage) {
         viewModelScope.launch {
-            extractorSettingsDataStore.updateData {
-                it.copy(
-                    language = newValue
-                )
-            }
+            extractorSettingsDataStore.updateData { it.copy(language = newValue) }
         }
     }
 
     fun updateAllDayEvents(newValue: Boolean) {
         viewModelScope.launch {
-            extractorSettingsDataStore.updateData {
-                it.copy(
-                    ignoreAllDayEvents = newValue
-                )
-            }
+            extractorSettingsDataStore.updateData { it.copy(ignoreAllDayEvents = newValue) }
+        }
+    }
+
+    fun updateDefaultEventDuration(newValue: Long) {
+        viewModelScope.launch {
+            extractorSettingsDataStore.updateData { it.copy(defaultEventDuration = newValue) }
         }
     }
 }

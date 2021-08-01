@@ -11,18 +11,26 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddLocation
 import androidx.compose.material.icons.filled.AlternateEmail
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.ViewDay
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.common.ui.DialogPickerSetting
+import com.boswelja.autoevent.common.ui.DurationPickerDialog
+import com.boswelja.autoevent.common.ui.getHourAndMinuteFromMillis
 import com.boswelja.autoevent.eventextractor.ExtractorSettings
 import kotlinx.coroutines.Dispatchers
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 @ExperimentalMaterialApi
 @Composable
@@ -44,6 +52,10 @@ fun ExtractorSettings(
     )
     val ignoreAllDayEvents by viewModel.ignoreAllDayEvents.collectAsState(
         initial = false,
+        context = Dispatchers.IO
+    )
+    val defaultDurationMillis by viewModel.defaultDuration.collectAsState(
+        initial = TimeUnit.MINUTES.toMillis(30),
         context = Dispatchers.IO
     )
     Column(modifier) {
@@ -74,6 +86,53 @@ fun ExtractorSettings(
             secondaryText = { Text(stringResource(R.string.extractor_ignore_allday_summary)) },
             icon = { Icon(Icons.Default.ViewDay, null) },
             trailing = { Checkbox(onCheckedChange = null, checked = ignoreAllDayEvents) }
+        )
+        DefaultDurationSetting(
+            durationMillis = defaultDurationMillis,
+            onDurationChange = { viewModel.updateDefaultEventDuration(it) }
+        )
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun DefaultDurationSetting(
+    modifier: Modifier = Modifier,
+    durationMillis: Long,
+    onDurationChange: (Long) -> Unit
+) {
+    val context = LocalContext.current
+
+    var dialogVisible by remember {
+        mutableStateOf(false)
+    }
+
+    val displayText = remember(durationMillis) {
+        val (hours, minutes) = getHourAndMinuteFromMillis(durationMillis)
+        buildString {
+            if (hours > 0) {
+                append(context.resources.getQuantityString(R.plurals.hours, hours.toInt(), hours))
+                append(" ")
+            }
+            if (minutes > 0) {
+                append(context.resources.getQuantityString(R.plurals.minutes, minutes.toInt(), minutes))
+            }
+        }
+    }
+
+    ListItem(
+        modifier = modifier.clickable { dialogVisible = true },
+        icon = { Icon(Icons.Default.Timer, null) },
+        text = { Text(stringResource(R.string.default_duration_title)) },
+        secondaryText = { Text(displayText) }
+    )
+
+    if (dialogVisible) {
+        DurationPickerDialog(
+            title = { Text(stringResource(R.string.default_duration_title)) },
+            onDismissRequest = { dialogVisible = false },
+            durationMillis = durationMillis,
+            onDurationChange = onDurationChange
         )
     }
 }
