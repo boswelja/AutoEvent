@@ -21,6 +21,8 @@
 
     <string name="event_noti_channel_name">Discovered Events</string>
     <string name="event_noti_title">Event Found</string>
+    <string name="event_noti_from_summary">%s invited you to an event! Tap to add to your calendar</string>
+    <string name="event_noti_generic_summary">Found an event from %s! Tap to add to your calendar</string>
 
     <string name="language_detect" translatable="false">Auto (%s)</string>
 

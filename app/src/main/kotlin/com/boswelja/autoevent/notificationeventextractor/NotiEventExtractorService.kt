@@ -54,8 +54,8 @@ class NotiEventExtractorService : NotificationListenerService() {
         if (sbn == null) return
         if (ignoredPackages.contains(sbn.packageName)) return
         coroutineScope.launch {
-            val text = sbn.getDetails(packageManager)
-            eventExtractor.extractEventFrom(text.text)?.let { event ->
+            val details = sbn.getDetails(packageManager)
+            eventExtractor.extractEventFrom(details.text)?.let { event ->
                 val eventHash = event.hashCode()
                 // Only post notification if we haven't already got the same event info
                 val oldEventForNoti = notiIdMap[sbn.id]
@@ -63,13 +63,16 @@ class NotiEventExtractorService : NotificationListenerService() {
                     // Cancel previous notification, update our map and post new notification
                     oldEventForNoti?.let { notificationManager.cancel(it) }
                     notiIdMap[sbn.id] = eventHash
-                    postEventNotification(event, sbn.packageName)
+                    postEventNotification(event, details)
                 }
             }
         }
     }
 
-    private fun postEventNotification(eventDetails: Event, packageName: String) {
+    private fun postEventNotification(
+        eventDetails: Event,
+        notificationDetails: NotificationDetails
+    ) {
         val notificationId = eventDetails.hashCode()
         val createEventIntent = Intent(Intent.ACTION_INSERT)
             .setData(CalendarContract.Events.CONTENT_URI)
@@ -82,14 +85,20 @@ class NotiEventExtractorService : NotificationListenerService() {
         val ignoreAppIntent = Intent(this, NotiActionHandler::class.java)
             .setAction(NotiActionHandler.IGNORE_PACKAGE_ACTION)
             .putExtra(NotiActionHandler.EXTRA_NOTIFICATION_ID, notificationId)
-            .putExtra(NotiActionHandler.EXTRA_PACKAGE_NAME, packageName)
+            .putExtra(NotiActionHandler.EXTRA_PACKAGE_NAME, notificationDetails.packageName)
         val ignoreAppPendingIntent = PendingIntent.getBroadcast(
             this, notificationId, ignoreAppIntent, PendingIntent.FLAG_IMMUTABLE
         )
 
+        val contentText = if (notificationDetails.senderName != null) {
+            getString(R.string.event_noti_from_summary, notificationDetails.senderName)
+        } else {
+            getString(R.string.event_noti_generic_summary, notificationDetails.packageLabel)
+        }
+
         val notification = Notification.Builder(this, EventDetailsChannel)
             .setContentTitle(getString(R.string.event_noti_title))
-            .setContentText("Haha text go brrrr")
+            .setContentText(contentText)
             .setSmallIcon(R.drawable.noti_ic_event_found)
             .setContentIntent(createPendingIntent)
             .addAction(
