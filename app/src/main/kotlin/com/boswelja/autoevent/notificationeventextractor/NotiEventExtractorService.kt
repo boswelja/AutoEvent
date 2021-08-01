@@ -9,7 +9,6 @@ import android.graphics.drawable.Icon
 import android.provider.CalendarContract
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.eventextractor.Event
@@ -55,7 +54,7 @@ class NotiEventExtractorService : NotificationListenerService() {
         if (sbn == null) return
         if (ignoredPackages.contains(sbn.packageName)) return
         coroutineScope.launch {
-            val text = sbn.getDetails()
+            val text = sbn.getDetails(packageManager)
             eventExtractor.extractEventFrom(text.text)?.let { event ->
                 val eventHash = event.hashCode()
                 // Only post notification if we haven't already got the same event info
@@ -67,45 +66,6 @@ class NotiEventExtractorService : NotificationListenerService() {
                     postEventNotification(event, sbn.packageName)
                 }
             }
-        }
-    }
-
-    /**
-     * Extract some details about the [StatusBarNotification].
-     * @return A [NotificationDetails] containing data about this notification.
-     */
-    private fun StatusBarNotification.getDetails(): NotificationDetails {
-        // Load common details
-        val packageLabel = packageManager.getApplicationInfo(packageName, 0)
-            .loadLabel(packageManager)
-
-        // Load message style if it exists
-        val messageStyle = NotificationCompat.MessagingStyle
-            .extractMessagingStyleFromNotification(notification)
-
-        if (messageStyle != null) {
-            // Message style found, get details
-            val text = messageStyle.messages
-                .filter { !it.text.isNullOrBlank() }
-                .joinToString { it.text!! }
-            val sender = messageStyle.conversationTitle
-                ?: messageStyle.messages.firstOrNull { it.person != null }?.person?.name
-
-            return NotificationDetails(
-                text,
-                sender?.toString(),
-                packageLabel.toString(),
-                packageName
-            )
-        } else {
-            // No message style found
-            val text = notification.extras.getString(Notification.EXTRA_TEXT, "")
-            return NotificationDetails(
-                text,
-                null,
-                packageLabel.toString(),
-                packageName
-            )
         }
     }
 
