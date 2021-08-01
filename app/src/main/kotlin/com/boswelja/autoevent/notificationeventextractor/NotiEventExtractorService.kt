@@ -55,8 +55,8 @@ class NotiEventExtractorService : NotificationListenerService() {
         if (sbn == null) return
         if (ignoredPackages.contains(sbn.packageName)) return
         coroutineScope.launch {
-            val text = sbn.notification.allText()
-            eventExtractor.extractEventFrom(text)?.let { event ->
+            val text = sbn.getDetails()
+            eventExtractor.extractEventFrom(text.text)?.let { event ->
                 val eventHash = event.hashCode()
                 // Only post notification if we haven't already got the same event info
                 val oldEventForNoti = notiIdMap[sbn.id]
@@ -70,13 +70,32 @@ class NotiEventExtractorService : NotificationListenerService() {
         }
     }
 
-    private fun Notification.allText(): String {
+    /**
+     * Extract some details about the [StatusBarNotification].
+     * @return A [NotificationDetails] containing data about this notification.
+     */
+    private fun StatusBarNotification.getDetails(): NotificationDetails {
+        // Load message style if it exists
         val messageStyle = NotificationCompat.MessagingStyle
-            .extractMessagingStyleFromNotification(this)
-        val messageStyleText = messageStyle?.messages
-            ?.filter { !it.text.isNullOrBlank() }
-            ?.joinToString { it.text!! }
-        return messageStyleText ?: extras.getString(Notification.EXTRA_TEXT, "")
+            .extractMessagingStyleFromNotification(notification)
+
+        if (messageStyle != null) {
+            // Message style found, get details
+            val text = messageStyle.messages
+                .filter { !it.text.isNullOrBlank() }
+                .joinToString { it.text!! }
+            val sender = messageStyle.conversationTitle
+                ?: messageStyle.messages.firstOrNull { it.person != null }?.person?.name
+            val packageName = packageManager.getApplicationInfo(this.packageName, 0)
+                .loadLabel(packageManager)
+            return NotificationDetails(text, sender?.toString(), packageName.toString())
+        } else {
+            // No message style found
+            val text = notification.extras.getString(Notification.EXTRA_TEXT, "")
+            val packageName = packageManager.getApplicationInfo(this.packageName, 0)
+                .loadLabel(packageManager)
+            return NotificationDetails(text, null, packageName.toString())
+        }
     }
 
     private fun postEventNotification(eventDetails: Event, packageName: String) {
