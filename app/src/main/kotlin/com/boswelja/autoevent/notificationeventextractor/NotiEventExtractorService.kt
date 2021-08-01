@@ -14,13 +14,13 @@ import androidx.core.content.getSystemService
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.eventextractor.Event
 import com.boswelja.autoevent.eventextractor.EventExtractor
+import java.text.DateFormat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.text.DateFormat
 
 class NotiEventExtractorService : NotificationListenerService() {
 
