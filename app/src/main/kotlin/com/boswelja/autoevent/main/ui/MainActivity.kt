@@ -7,6 +7,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,6 +35,9 @@ import androidx.navigation.compose.rememberNavController
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.common.ui.AppTheme
 import com.boswelja.autoevent.notificationeventextractor.ui.BlocklistScreen
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.accompanist.insets.statusBarsPadding
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,6 +45,8 @@ class MainActivity : AppCompatActivity() {
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             val navController = rememberNavController()
@@ -53,6 +60,7 @@ class MainActivity : AppCompatActivity() {
                 Scaffold(
                     topBar = {
                         TopAppBar(
+                            modifier = Modifier.statusBarsPadding(),
                             title = { Text(stringResource(R.string.app_name)) },
                             navigationIcon = {
                                 AnimatedVisibility(
@@ -74,9 +82,15 @@ class MainActivity : AppCompatActivity() {
                     }
                 ) {
                     NavigationScreen(
-                        modifier = Modifier
-                            .padding(it)
-                            .padding(16.dp),
+                        contentPadding = rememberInsetsPaddingValues(
+                            insets = LocalWindowInsets.current.systemBars,
+                            applyTop = false,
+                            applyBottom = true,
+                            additionalBottom = 16.dp,
+                            additionalEnd = 16.dp,
+                            additionalStart = 16.dp,
+                            additionalTop = 16.dp
+                        ),
                         navController = navController
                     )
                 }
@@ -89,7 +103,8 @@ class MainActivity : AppCompatActivity() {
 @ExperimentalAnimationApi
 @Composable
 fun NavigationScreen(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
     navController: NavHostController
 ) {
     NavHost(
@@ -100,12 +115,13 @@ fun NavigationScreen(
         composable(Destinations.HOME.name) {
             MainScreen(
                 modifier = Modifier.fillMaxSize(),
+                contentPadding = contentPadding,
                 onNavigate = { navController.navigate(it.name) }
             )
         }
         composable(Destinations.BLOCKLIST.name) {
             BlocklistScreen(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize().padding(contentPadding)
             )
         }
     }
