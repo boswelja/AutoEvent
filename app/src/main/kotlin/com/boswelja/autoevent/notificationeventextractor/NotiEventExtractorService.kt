@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 
 class NotiEventExtractorService : NotificationListenerService() {
 
-    private val notiIdMap = mutableMapOf<Int, Int>()
+    private val handledEventMap = mutableMapOf<Int, Int>()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private var ignoredPackages: List<String> = emptyList()
@@ -55,14 +55,15 @@ class NotiEventExtractorService : NotificationListenerService() {
         if (ignoredPackages.contains(sbn.packageName)) return
         coroutineScope.launch {
             val details = sbn.getDetails(packageManager)
+            val detailsHash = details.hashCode()
             eventExtractor.extractEventFrom(details.text)?.let { event ->
                 val eventHash = event.hashCode()
                 // Only post notification if we haven't already got the same event info
-                val oldEventForNoti = notiIdMap[sbn.id]
+                val oldEventForNoti = handledEventMap[detailsHash]
                 if (oldEventForNoti != eventHash) {
                     // Cancel previous notification, update our map and post new notification
                     oldEventForNoti?.let { notificationManager.cancel(it) }
-                    notiIdMap[sbn.id] = eventHash
+                    handledEventMap[detailsHash] = eventHash
                     postEventNotification(event, details)
                 }
             }
