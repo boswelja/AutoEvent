@@ -48,6 +48,11 @@ fun DurationPickerDialog(
     var minutes by remember(hourAndMinute) {
         mutableStateOf(hourAndMinute.second.toString())
     }
+    val saveEnabled by remember(hours, minutes) {
+        val hoursValid = hours.toLongOrNull() != null
+        val minutesValid = minutes.toLongOrNull() != null
+        mutableStateOf(hoursValid && minutesValid)
+    }
     MaterialDialog(
         modifier = modifier,
         elevation = elevation,
@@ -79,6 +84,7 @@ fun DurationPickerDialog(
             DialogButtons(
                 positiveButton = {
                     TextButton(
+                        enabled = saveEnabled,
                         onClick = {
                             val newDuration = getMillisFromHoursAndMinutes(
                                 hours.toLong(), minutes.toLong()
