@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 class NotiEventExtractorService : NotificationListenerService() {
 
-    private val notiIdMap = mutableMapOf<Int, Event>()
+    private val notiIdMap = mutableMapOf<Int, Int>()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private var ignoredPackages: List<String> = emptyList()
@@ -58,12 +58,13 @@ class NotiEventExtractorService : NotificationListenerService() {
         coroutineScope.launch {
             val text = sbn.notification.allText()
             eventExtractor.extractEventFrom(text)?.let { event ->
+                val eventHash = event.hashCode()
                 // Only post notification if we haven't already got the same event info
                 val oldEventForNoti = notiIdMap[sbn.id]
-                if (oldEventForNoti != event) {
+                if (oldEventForNoti != eventHash) {
                     // Cancel previous notification, update our map and post new notification
-                    oldEventForNoti?.let { notificationManager.cancel(it.hashCode()) }
-                    notiIdMap[sbn.id] = event
+                    oldEventForNoti?.let { notificationManager.cancel(it) }
+                    notiIdMap[sbn.id] = eventHash
                     postEventNotification(event, sbn.packageName)
                 }
             }
@@ -105,13 +106,7 @@ class NotiEventExtractorService : NotificationListenerService() {
             .setContentText(getString(R.string.event_noti_summary, formattedStart))
             .setSmallIcon(R.drawable.noti_ic_event_found)
             .setStyle(createNotificationStyleForEvent(eventDetails))
-            .addAction(
-                Notification.Action.Builder(
-                    Icon.createWithResource(this, R.drawable.noti_ic_event_add),
-                    getString(R.string.event_add_to_calendar),
-                    createPendingIntent
-                ).build()
-            )
+            .setContentIntent(createPendingIntent)
             .addAction(
                 Notification.Action.Builder(
                     Icon.createWithResource(this, R.drawable.noti_ic_event_block),
