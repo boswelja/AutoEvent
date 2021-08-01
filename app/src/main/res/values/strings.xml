@@ -10,7 +10,6 @@
     <string name="event_from">Starting %s</string>
     <string name="event_to">Finishing %s</string>
     <string name="event_at">At %s</string>
-    <string name="event_all_day">All Day %s</string>
 
     <string name="event_ignore_for_app">Ignore this App</string>
     <string name="event_add_to_calendar">Add to Calendar</string>
@@ -18,7 +17,6 @@
     <string name="noti_extractor_settings_title">Notification Listener Settings</string>
     <string name="noti_extractor_blocklist_title">Blocklist</string>
     <string name="noti_extractor_blocklist_add">Add to Blocklist</string>
-    <string name="noti_extractor_blocklist_none">Not ignoring notifications from any app</string>
     <string name="extractor_settings_title">Extractor Settings</string>
     <string name="extractor_language_title">Language</string>
     <string name="extractor_ignore_allday_title">Ignore All-Day Events</string>
@@ -43,8 +41,6 @@
     <string name="grant">Grant</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
-    <string name="ok">OK</string>
-    <string name="done">Done</string>
     <string name="remove">Remove</string>
     <string name="add">Add</string>
 </resources>

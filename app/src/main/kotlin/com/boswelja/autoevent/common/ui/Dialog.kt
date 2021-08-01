@@ -200,7 +200,7 @@ fun <T> ConfirmationDialog(
                             onDismissRequest()
                         }
                     ) {
-                        Text(stringResource(R.string.ok))
+                        Text(stringResource(R.string.save))
                     }
                 },
                 negativeButton = {
