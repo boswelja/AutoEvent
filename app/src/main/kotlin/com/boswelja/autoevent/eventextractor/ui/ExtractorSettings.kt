@@ -28,9 +28,9 @@ import com.boswelja.autoevent.common.ui.DialogPickerSetting
 import com.boswelja.autoevent.common.ui.DurationPickerDialog
 import com.boswelja.autoevent.common.ui.getHourAndMinuteFromMillis
 import com.boswelja.autoevent.eventextractor.ExtractorSettings
-import kotlinx.coroutines.Dispatchers
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.Dispatchers
 
 @ExperimentalMaterialApi
 @Composable
@@ -115,7 +115,9 @@ fun DefaultDurationSetting(
                 append(" ")
             }
             if (minutes > 0) {
-                append(context.resources.getQuantityString(R.plurals.minutes, minutes.toInt(), minutes))
+                append(
+                    context.resources.getQuantityString(R.plurals.minutes, minutes.toInt(), minutes)
+                )
             }
         }
     }
