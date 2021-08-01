@@ -75,6 +75,10 @@ class NotiEventExtractorService : NotificationListenerService() {
      * @return A [NotificationDetails] containing data about this notification.
      */
     private fun StatusBarNotification.getDetails(): NotificationDetails {
+        // Load common details
+        val packageLabel = packageManager.getApplicationInfo(packageName, 0)
+            .loadLabel(packageManager)
+
         // Load message style if it exists
         val messageStyle = NotificationCompat.MessagingStyle
             .extractMessagingStyleFromNotification(notification)
@@ -86,15 +90,22 @@ class NotiEventExtractorService : NotificationListenerService() {
                 .joinToString { it.text!! }
             val sender = messageStyle.conversationTitle
                 ?: messageStyle.messages.firstOrNull { it.person != null }?.person?.name
-            val packageName = packageManager.getApplicationInfo(this.packageName, 0)
-                .loadLabel(packageManager)
-            return NotificationDetails(text, sender?.toString(), packageName.toString())
+
+            return NotificationDetails(
+                text,
+                sender?.toString(),
+                packageLabel.toString(),
+                packageName
+            )
         } else {
             // No message style found
             val text = notification.extras.getString(Notification.EXTRA_TEXT, "")
-            val packageName = packageManager.getApplicationInfo(this.packageName, 0)
-                .loadLabel(packageManager)
-            return NotificationDetails(text, null, packageName.toString())
+            return NotificationDetails(
+                text,
+                null,
+                packageLabel.toString(),
+                packageName
+            )
         }
     }
 

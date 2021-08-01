@@ -9,5 +9,6 @@ package com.boswelja.autoevent.notificationeventextractor
 data class NotificationDetails(
     val text: String,
     val senderName: String?,
-    val packageLabel: String
+    val packageLabel: String,
+    val packageName: String
 )
