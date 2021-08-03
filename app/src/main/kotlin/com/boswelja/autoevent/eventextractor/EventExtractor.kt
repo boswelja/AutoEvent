@@ -24,10 +24,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class EventExtractor(
-    context: Context,
-    private val settingsStore: DataStore<ExtractorSettings> = context.extractorSettingsDataStore,
+    private val settingsStore: DataStore<ExtractorSettings>,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) : Closeable {
+
+    constructor(context: Context) : this(context.extractorSettingsDataStore)
 
     private val coreTypeFilters = setOf(Entity.TYPE_DATE_TIME)
     internal val extraTypeFilters = mutableSetOf<Int>()
