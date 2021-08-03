@@ -9,7 +9,7 @@ import com.google.mlkit.nl.entityextraction.EntityExtractor
 
 class DummyEntityExtractor(
     private val annotationResults: List<EntityAnnotation>,
-    private var isModelDownloaded: Boolean = true
+    private var isModelDownloaded: Boolean = false
 ) : EntityExtractor {
 
     var isClosed = false
@@ -38,7 +38,7 @@ class DummyEntityExtractor(
 
     override fun downloadModelIfNeeded(
         conditions: DownloadConditions
-    ): Task<Void> = Tasks.forResult(null)
+    ): Task<Void> = downloadModelIfNeeded()
 
     override fun isModelDownloaded(): Task<Boolean> = Tasks.forResult(isModelDownloaded)
 }
