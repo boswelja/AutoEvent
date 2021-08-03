@@ -4,4 +4,12 @@
         <item quantity="other">Ignoring notifications from %s apps</item>
         <item quantity="one">Ignoring notifications from %s app</item>
     </plurals>
+    <plurals name="hours">
+        <item quantity="one">%s hour</item>
+        <item quantity="other">%s hours</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">%s minute</item>
+        <item quantity="other">%s minutes</item>
+    </plurals>
 </resources>

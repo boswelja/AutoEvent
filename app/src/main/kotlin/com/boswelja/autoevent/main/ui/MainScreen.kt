@@ -2,9 +2,8 @@ package com.boswelja.autoevent.main.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,18 +20,25 @@ import com.boswelja.autoevent.support.ui.SupportOptions
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
     onNavigate: (Destinations) -> Unit
 ) {
-    val scrollState = rememberScrollState()
-    Column(
-        modifier = modifier.verticalScroll(state = scrollState),
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        NotiExtractorCard(
-            onNavigate = onNavigate
-        )
-        ExtractorSettingsCard()
-        SupportAppCard()
+        item {
+            NotiExtractorCard(
+                onNavigate = onNavigate
+            )
+        }
+        item {
+            ExtractorSettingsCard()
+        }
+        item {
+            SupportAppCard()
+        }
     }
 }
 

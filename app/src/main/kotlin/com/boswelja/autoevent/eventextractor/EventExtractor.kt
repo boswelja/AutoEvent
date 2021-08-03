@@ -35,6 +35,7 @@ class EventExtractor(
     private val isReady = MutableStateFlow(false)
     private var entityExtractor: EntityExtractor? = null
     private var ignoreAllDayEvents: Boolean = false
+    private var defaultDuration: Long = TimeUnit.MINUTES.toMillis(30)
 
     init {
         coroutineScope.launch {
@@ -54,6 +55,7 @@ class EventExtractor(
                     extraTypeFilters.remove(Entity.TYPE_ADDRESS)
                 }
                 ignoreAllDayEvents = it.ignoreAllDayEvents
+                defaultDuration = it.defaultEventDuration
             }
         }
     }
@@ -91,7 +93,7 @@ class EventExtractor(
         if (startDate < Date()) return null
 
         // Calculate end date and whether the event is considered to be all-day
-        val endDate = dates.secondOrNull() ?: Date(estimateEndTimeMillis(startDate.time))
+        val endDate = dates.secondOrNull() ?: Date(startDate.time + defaultDuration)
         val isAllDay = eventDates.all { it.isAllDay() }
 
         return Event(
@@ -126,11 +128,6 @@ class EventExtractor(
         } else {
             Extras()
         }
-    }
-
-    private fun estimateEndTimeMillis(startMillis: Long): Long {
-        val durationMillis = TimeUnit.HOURS.toMillis(1)
-        return startMillis + durationMillis
     }
 
     private fun getLanguageOption(language: ExtractorSettings.ExtractorLanguage): String {
