@@ -10,6 +10,10 @@ import com.google.mlkit.nl.entityextraction.EntityExtraction
 import com.google.mlkit.nl.entityextraction.EntityExtractionParams
 import com.google.mlkit.nl.entityextraction.EntityExtractor
 import com.google.mlkit.nl.entityextraction.EntityExtractorOptions
+import java.io.Closeable
+import java.util.Date
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -18,10 +22,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.io.Closeable
-import java.util.Date
-import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 class EventExtractor(
     context: Context,
