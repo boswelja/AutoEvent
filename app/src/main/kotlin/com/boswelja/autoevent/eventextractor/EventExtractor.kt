@@ -30,12 +30,12 @@ class EventExtractor(
 ) : Closeable {
 
     private val coreTypeFilters = setOf(Entity.TYPE_DATE_TIME)
-    private val extraTypeFilters = mutableSetOf<Int>()
+    internal val extraTypeFilters = mutableSetOf<Int>()
 
-    private val isReady = MutableStateFlow(false)
-    private var entityExtractor: EntityExtractor? = null
-    private var ignoreAllDayEvents: Boolean = false
-    private var defaultDuration: Long = TimeUnit.MINUTES.toMillis(30)
+    internal val isReady = MutableStateFlow(false)
+    internal var entityExtractor: EntityExtractor? = null
+    internal var ignoreAllDayEvents: Boolean = false
+    internal var defaultDuration: Long = TimeUnit.MINUTES.toMillis(30)
 
     init {
         coroutineScope.launch {
