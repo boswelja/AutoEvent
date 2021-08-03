@@ -7,16 +7,16 @@ import com.google.mlkit.nl.entityextraction.EntityAnnotation
 import com.google.mlkit.nl.entityextraction.EntityExtractionParams
 import com.google.mlkit.nl.entityextraction.EntityExtractor
 
-class DummyEntityExtractor(
-    private val annotationResults: List<EntityAnnotation>,
+class DummyEntityExtractor : EntityExtractor {
     private var isModelDownloaded: Boolean = false
-) : EntityExtractor {
 
     var isClosed = false
         private set
 
     var lastAnnotateParams: EntityExtractionParams? = null
         private set
+
+    val annotationResults = mutableListOf<EntityAnnotation>()
 
     override fun close() {
         isClosed = true
@@ -45,5 +45,6 @@ class DummyEntityExtractor(
     fun reset() {
         lastAnnotateParams = null
         isClosed = false
+        isModelDownloaded = false
     }
 }
