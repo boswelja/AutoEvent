@@ -104,7 +104,7 @@ class EventExtractor(
         )
     }
 
-    private suspend fun extractExtrasFrom(text: String): Extras {
+    internal suspend fun extractExtrasFrom(text: String): Extras {
         return if (extraTypeFilters.isNotEmpty()) {
             val params = EntityExtractionParams.Builder(text)
                 .setEntityTypesFilter(extraTypeFilters)
@@ -156,7 +156,7 @@ class EventExtractor(
         }
     }
 
-    private suspend fun initWithLanguage(language: ExtractorSettings.ExtractorLanguage) {
+    internal suspend fun initWithLanguage(language: ExtractorSettings.ExtractorLanguage) {
         val options = EntityExtractorOptions.Builder(getLanguageOption(language))
             .build()
         entityExtractor = EntityExtraction.getClient(options)
