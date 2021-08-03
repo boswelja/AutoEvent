@@ -41,4 +41,9 @@ class DummyEntityExtractor(
     ): Task<Void> = downloadModelIfNeeded()
 
     override fun isModelDownloaded(): Task<Boolean> = Tasks.forResult(isModelDownloaded)
+
+    fun reset() {
+        lastAnnotateParams = null
+        isClosed = false
+    }
 }
