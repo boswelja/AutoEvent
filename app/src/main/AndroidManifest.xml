@@ -42,7 +42,7 @@
         </service>
 
         <receiver
-            android:name=".notificationeventextractor.NotiActionHandler"
+            android:name=".notificationeventextractor.NotiActionReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.boswelja.autoevent.IGNORE_PACKAGE" />

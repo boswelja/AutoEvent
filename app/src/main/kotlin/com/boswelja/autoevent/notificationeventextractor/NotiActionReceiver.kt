@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class NotiActionHandler : BroadcastReceiver() {
+class NotiActionReceiver : BroadcastReceiver() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 

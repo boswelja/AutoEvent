@@ -87,10 +87,10 @@ class NotiEventExtractorService : NotificationListenerService() {
         val createPendingIntent = PendingIntent.getActivity(
             this, notificationId, createEventIntent, PendingIntent.FLAG_IMMUTABLE
         )
-        val ignoreAppIntent = Intent(this, NotiActionHandler::class.java)
-            .setAction(NotiActionHandler.IGNORE_PACKAGE_ACTION)
-            .putExtra(NotiActionHandler.EXTRA_NOTIFICATION_ID, notificationId)
-            .putExtra(NotiActionHandler.EXTRA_PACKAGE_NAME, notificationDetails.packageName)
+        val ignoreAppIntent = Intent(this, NotiActionReceiver::class.java)
+            .setAction(NotiActionReceiver.IGNORE_PACKAGE_ACTION)
+            .putExtra(NotiActionReceiver.EXTRA_NOTIFICATION_ID, notificationId)
+            .putExtra(NotiActionReceiver.EXTRA_PACKAGE_NAME, notificationDetails.packageName)
         val ignoreAppPendingIntent = PendingIntent.getBroadcast(
             this, notificationId, ignoreAppIntent, PendingIntent.FLAG_IMMUTABLE
         )
