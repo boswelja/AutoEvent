@@ -10,6 +10,10 @@ import com.google.mlkit.nl.entityextraction.EntityExtraction
 import com.google.mlkit.nl.entityextraction.EntityExtractionParams
 import com.google.mlkit.nl.entityextraction.EntityExtractor
 import com.google.mlkit.nl.entityextraction.EntityExtractorOptions
+import java.io.Closeable
+import java.util.Date
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -18,24 +22,21 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.io.Closeable
-import java.util.Date
-import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 class EventExtractor(
-    context: Context,
-    private val settingsStore: DataStore<ExtractorSettings> = context.extractorSettingsDataStore,
+    private val settingsStore: DataStore<ExtractorSettings>,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) : Closeable {
 
-    private val coreTypeFilters = setOf(Entity.TYPE_DATE_TIME)
-    private val extraTypeFilters = mutableSetOf<Int>()
+    constructor(context: Context) : this(context.extractorSettingsDataStore)
 
-    private val isReady = MutableStateFlow(false)
-    private var entityExtractor: EntityExtractor? = null
-    private var ignoreAllDayEvents: Boolean = false
-    private var defaultDuration: Long = TimeUnit.MINUTES.toMillis(30)
+    private val coreTypeFilters = setOf(Entity.TYPE_DATE_TIME)
+    internal val extraTypeFilters = mutableSetOf<Int>()
+
+    internal val isReady = MutableStateFlow(false)
+    internal var entityExtractor: EntityExtractor? = null
+    internal var ignoreAllDayEvents: Boolean = false
+    internal var defaultDuration: Long = TimeUnit.MINUTES.toMillis(30)
 
     init {
         coroutineScope.launch {
@@ -104,7 +105,7 @@ class EventExtractor(
         )
     }
 
-    private suspend fun extractExtrasFrom(text: String): Extras {
+    internal suspend fun extractExtrasFrom(text: String): Extras {
         return if (extraTypeFilters.isNotEmpty()) {
             val params = EntityExtractionParams.Builder(text)
                 .setEntityTypesFilter(extraTypeFilters)
@@ -156,7 +157,7 @@ class EventExtractor(
         }
     }
 
-    private suspend fun initWithLanguage(language: ExtractorSettings.ExtractorLanguage) {
+    internal suspend fun initWithLanguage(language: ExtractorSettings.ExtractorLanguage) {
         val options = EntityExtractorOptions.Builder(getLanguageOption(language))
             .build()
         entityExtractor = EntityExtraction.getClient(options)

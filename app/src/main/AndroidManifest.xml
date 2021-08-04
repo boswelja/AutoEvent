@@ -25,7 +25,7 @@
         </activity>
 
         <service
-            android:name=".notificationeventextractor.NotiEventExtractorService"
+            android:name=".notificationeventextractor.NotiListenerService"
             android:exported="true"
             android:label="@string/noti_listener_label"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
@@ -42,7 +42,7 @@
         </service>
 
         <receiver
-            android:name=".notificationeventextractor.NotiActionHandler"
+            android:name=".notificationeventextractor.NotiActionReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.boswelja.autoevent.IGNORE_PACKAGE" />
