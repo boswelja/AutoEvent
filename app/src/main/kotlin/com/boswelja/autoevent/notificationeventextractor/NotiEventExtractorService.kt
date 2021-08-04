@@ -6,6 +6,8 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.drawable.Icon
+import android.os.Binder
+import android.os.IBinder
 import android.provider.CalendarContract
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
@@ -29,6 +31,8 @@ class NotiEventExtractorService : NotificationListenerService() {
 
     private lateinit var eventExtractor: EventExtractor
     private lateinit var notificationManager: NotificationManager
+
+    override fun onBind(intent: Intent?): IBinder = Binder()
 
     override fun onListenerConnected() {
         eventExtractor = EventExtractor(this@NotiEventExtractorService)
