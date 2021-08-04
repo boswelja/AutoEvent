@@ -37,7 +37,7 @@ class NotiEventExtractor(
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    private var ignoredPackages: List<String> = emptyList()
+    internal var ignoredPackages: List<String> = emptyList()
 
     init {
         createNotificationChannel()
