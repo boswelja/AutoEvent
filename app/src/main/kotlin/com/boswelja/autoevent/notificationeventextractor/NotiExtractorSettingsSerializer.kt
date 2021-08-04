@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
+import com.boswelja.autoevent.BuildConfig
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -15,7 +16,9 @@ val Context.notiExtractorSettingsStore: DataStore<NotiExtractorSettings> by data
 object NotiExtractorSettingsSerializer : Serializer<NotiExtractorSettings> {
     override val defaultValue: NotiExtractorSettings = NotiExtractorSettings(
         running = false,
-        blocklist = emptyList()
+        blocklist = listOf(
+            BuildConfig.APPLICATION_ID
+        )
     )
 
     override suspend fun readFrom(input: InputStream): NotiExtractorSettings {
