@@ -29,7 +29,7 @@ class NotiListenerService : NotificationListenerService() {
         if (sbn == null) return
         coroutineScope.launch {
             val details = sbn.getDetails(packageManager)
-            notiExtractor.getNewEventFor(details)?.let { event ->
+            notiExtractor.getEventFor(details)?.let { event ->
                 notiExtractor.postEventNotification(event, details)
             }
         }

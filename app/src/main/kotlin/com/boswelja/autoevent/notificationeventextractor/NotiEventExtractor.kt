@@ -21,6 +21,13 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
+/**
+ * A class for extracting [Event]s from [NotificationDetails], and handling event notifications.
+ * @param context [Context].
+ * @param eventExtractor The [EventExtractor] instance to use.
+ * @param notificationManager [NotificationManager].
+ * @param settingsStore The [DataStore] to read [NotiExtractorSettings] from.
+ */
 class NotiEventExtractor(
     private val context: Context,
     private val eventExtractor: EventExtractor = EventExtractor(context),
@@ -35,7 +42,9 @@ class NotiEventExtractor(
     init {
         createNotificationChannel()
         coroutineScope.launch {
+            // Mark extractor as running
             settingsStore.updateData { it.copy(running = true) }
+            // Collect blocklist changes
             settingsStore.data.map { it.blocklist }.collect {
                 ignoredPackages = it
             }
@@ -50,13 +59,25 @@ class NotiEventExtractor(
         }
     }
 
-    suspend fun getNewEventFor(details: NotificationDetails): Event? {
+    /**
+     * Gets an [Event] from the details provided by the given [NotificationDetails]. Can be null if
+     * no event is found, or the details are for a notification from a package on the blocklist.
+     * @param details The [NotificationDetails] to use for creating an event.
+     * @return The [Event] found. Can be null if no event is found, or the details are for a
+     * notification from a package on the blocklist.
+     */
+    suspend fun getEventFor(details: NotificationDetails): Event? {
         if (!ignoredPackages.contains(details.packageName)) {
             return eventExtractor.extractEventFrom(details.text)
         }
         return null
     }
 
+    /**
+     * Post a notification for the given event and notification details.
+     * @param event The [Event] to post a notification for.
+     * @param details The [NotificationDetails] that generated the [Event].
+     */
     fun postEventNotification(event: Event, details: NotificationDetails) {
         val notificationId = event.hashCode()
         val createPendingIntent = getCreateIntentForEvent(notificationId, event)
@@ -85,6 +106,13 @@ class NotiEventExtractor(
         notificationManager.notify(notificationId, notification)
     }
 
+    /**
+     * Get a [PendingIntent] that can be used to launch the system calendar "add event" activity for
+     * a given [Event].
+     * @param id The [PendingIntent] requestCode. This should be a non-zero, unique value.
+     * @param event The [Event] to build an intent for.
+     * @return The created [PendingIntent].
+     */
     private fun getCreateIntentForEvent(id: Int, event: Event): PendingIntent {
         val createEventIntent = Intent(Intent.ACTION_INSERT)
             .setData(CalendarContract.Events.CONTENT_URI)
@@ -96,6 +124,12 @@ class NotiEventExtractor(
         )
     }
 
+    /**
+     * Get a [PendingIntent] that can be used to add a package to the blocklist.
+     * @param id The [PendingIntent] requestCode. This should be a non-zero, unique value.
+     * @param packageName The [NotificationDetails.packageName] to add to the blocklist.
+     * @return The created [PendingIntent].
+     */
     private fun getIgnoreAppIntent(id: Int, packageName: String): PendingIntent {
         val ignoreAppIntent = Intent(context, NotiActionReceiver::class.java)
             .setAction(NotiActionReceiver.IGNORE_PACKAGE_ACTION)
@@ -106,6 +140,10 @@ class NotiEventExtractor(
         )
     }
 
+    /**
+     * Create a [NotificationChannel] for discovered events. The created channel has an ID of
+     * [EventDetailsChannel].
+     */
     private fun createNotificationChannel() {
         NotificationChannel(
             EventDetailsChannel,
