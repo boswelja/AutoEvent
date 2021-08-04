@@ -29,7 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.main.ui.Destinations
-import com.boswelja.autoevent.notificationeventextractor.NotiEventExtractorService
+import com.boswelja.autoevent.notificationeventextractor.NotiListenerService
 import kotlinx.coroutines.Dispatchers
 
 @ExperimentalAnimationApi
@@ -134,7 +134,7 @@ private fun launchNotiListenerSettings(context: Context) {
         Intent(Settings.ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS)
             .putExtra(
                 Settings.EXTRA_NOTIFICATION_LISTENER_COMPONENT_NAME,
-                ComponentName(context, NotiEventExtractorService::class.java).flattenToString()
+                ComponentName(context, NotiListenerService::class.java).flattenToString()
             )
     } else {
         Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
