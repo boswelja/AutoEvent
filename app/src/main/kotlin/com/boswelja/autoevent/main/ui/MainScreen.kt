@@ -88,7 +88,7 @@ fun AboutAppCard(
 ) {
     MainCardItem(
         modifier = modifier,
-        title = { Text(stringResource(R.string.support_app_title)) }
+        title = { Text(stringResource(R.string.about_app_title)) }
     ) {
         AboutApp(modifier = contentModifier)
     }
