@@ -1,4 +1,4 @@
-package com.boswelja.autoevent.support.ui
+package com.boswelja.autoevent.about.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -16,7 +16,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.boswelja.autoevent.R
 
-@ExperimentalMaterialApi
+@Composable
+fun AboutApp(
+    modifier: Modifier = Modifier
+) {
+    Column(modifier) {
+        SupportOptions()
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SupportOptions(
     modifier: Modifier = Modifier
