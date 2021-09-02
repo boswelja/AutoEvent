@@ -4,6 +4,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,11 +22,13 @@ import com.boswelja.autoevent.notificationeventextractor.ui.NotiExtractorSetting
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
+    listState: LazyListState = rememberLazyListState(),
     contentPadding: PaddingValues = PaddingValues(),
     onNavigate: (Destinations) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
+        state = listState,
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
