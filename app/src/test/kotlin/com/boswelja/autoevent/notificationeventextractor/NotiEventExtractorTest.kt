@@ -16,6 +16,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import java.util.Date
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
@@ -61,15 +62,18 @@ class NotiEventExtractorTest {
 
     @Test
     fun `changing blocklist updates the blocklist properly`(): Unit = runBlocking {
-        // Reset internal blocklist
-        notiExtractor.ignoredPackages = emptyList()
-
         // Set a new value
         val blocklist = listOf(
             "com.boswelja.autoevent", "com.boswelja.smartwatchextensions"
         )
         settingsStore.updateData { it.copy(blocklist = blocklist) }
         settingsStore.data.first { it.blocklist.containsAll(blocklist) }
+
+        withTimeout(2000) {
+            while (notiExtractor.ignoredPackages.isEmpty()) {
+                delay(50)
+            }
+        }
 
         // Check result
         expectThat(notiExtractor.ignoredPackages).containsExactlyInAnyOrder(blocklist)
