@@ -4,6 +4,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -11,20 +13,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.boswelja.autoevent.R
+import com.boswelja.autoevent.about.ui.AboutApp
 import com.boswelja.autoevent.eventextractor.ui.ExtractorSettings
 import com.boswelja.autoevent.notificationeventextractor.ui.NotiExtractorSettings
-import com.boswelja.autoevent.support.ui.SupportOptions
 
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
+    listState: LazyListState = rememberLazyListState(),
     contentPadding: PaddingValues = PaddingValues(),
     onNavigate: (Destinations) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
+        state = listState,
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -37,7 +41,7 @@ fun MainScreen(
             ExtractorSettingsCard()
         }
         item {
-            SupportAppCard()
+            AboutAppCard()
         }
     }
 }
@@ -77,16 +81,15 @@ fun ExtractorSettingsCard(
     }
 }
 
-@ExperimentalMaterialApi
 @Composable
-fun SupportAppCard(
+fun AboutAppCard(
     modifier: Modifier = Modifier,
     contentModifier: Modifier = Modifier
 ) {
     MainCardItem(
         modifier = modifier,
-        title = { Text(stringResource(R.string.support_app_title)) }
+        title = { Text(stringResource(R.string.about_app_title)) }
     ) {
-        SupportOptions(modifier = contentModifier)
+        AboutApp(modifier = contentModifier)
     }
 }

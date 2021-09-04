@@ -26,8 +26,10 @@
 
     <string name="language_detect" translatable="false">Auto (%s)</string>
 
-    <string name="support_app_title">Like the app?</string>
+    <string name="about_app_title">About AutoEvent</string>
     <string name="rate_app">Rate &amp; Review</string>
+    <string name="source_code">Source Code</string>
+    <string name="privacy_policy">Privacy Policy</string>
 
     <string name="default_duration_title">Default Event Duration</string>
 
