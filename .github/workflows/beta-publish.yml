@@ -17,7 +17,7 @@ jobs:
           distribution: 'adopt'
           java-version: 11
       - name: Git Version
-        uses: codacy/git-version@2.5.3
+        uses: codacy/git-version@2.5.4
         id: version
         with:
           release-branch: main
@@ -70,7 +70,7 @@ jobs:
           java-version: 11
 
       - name: Git Version
-        uses: codacy/git-version@2.5.3
+        uses: codacy/git-version@2.5.4
         id: version
         with:
           release-branch: main
