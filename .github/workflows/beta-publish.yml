@@ -50,7 +50,7 @@ jobs:
           keyStorePassword: ${{ secrets.KEYSTORE_PASS }}
           keyPassword: ${{ secrets.KEYSTORE_ALIAS_PASS }}
       - name: Save Signed Bundle
-        uses: actions/upload-artifact@v2.3.1
+        uses: actions/upload-artifact@v3
         with:
           name: app-release.aab
           path: ${{ steps.sign-release.outputs.signedReleaseFile }}
