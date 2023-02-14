@@ -5,12 +5,14 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    namespace = "com.boswelja.autoevent"
+
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.boswelja.autoevent"
         minSdk = 26
-        targetSdk = 31
+        targetSdk = 33
         versionCode = PackageInfo.getVersionCode()
         versionName = PackageInfo.getVersionName()
 
@@ -32,7 +34,7 @@ android {
 
     buildFeatures.compose = true
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.get()
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
     testOptions {
         unitTests.isIncludeAndroidResources = true
@@ -80,7 +82,5 @@ dependencies {
 }
 
 wire {
-    kotlin {
-        android = true
-    }
+    kotlin {}
 }
