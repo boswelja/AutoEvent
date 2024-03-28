@@ -1,8 +1,8 @@
 package com.boswelja.autoevent.main.ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
+import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.boswelja.autoevent.common.ui.CardHeader
@@ -16,7 +16,7 @@ fun MainCardItem(
     Card(modifier) {
         Column {
             CardHeader(title = title)
-            Divider()
+            HorizontalDivider()
             content()
         }
     }

@@ -6,16 +6,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.ListItem
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AppBlocking
+import androidx.compose.material3.Card
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,7 +33,6 @@ import com.boswelja.autoevent.common.ui.CardHeader
 import com.boswelja.autoevent.common.ui.SimpleDialog
 import kotlinx.coroutines.Dispatchers
 
-@ExperimentalMaterialApi
 @Composable
 fun BlocklistScreen(
     modifier: Modifier = Modifier
@@ -55,7 +54,7 @@ fun BlocklistScreen(
                     Icon(Icons.Default.AppBlocking, null)
                 }
             )
-            Divider()
+            HorizontalDivider()
             LazyColumn {
                 items(blocklist) { appInfo ->
                     AppInfoItem(
@@ -72,8 +71,8 @@ fun BlocklistScreen(
                 item {
                     ListItem(
                         modifier = Modifier.clickable { addDialogVisible = true },
-                        text = { Text(stringResource(R.string.add)) },
-                        icon = { Icon(Icons.Default.Add, null) }
+                        headlineContent = { Text(stringResource(R.string.add)) },
+                        leadingContent = { Icon(Icons.Default.Add, null) }
                     )
                 }
             }
@@ -92,7 +91,6 @@ fun BlocklistScreen(
     }
 }
 
-@ExperimentalMaterialApi
 @Composable
 fun AppInfoItem(
     modifier: Modifier = Modifier,
@@ -101,8 +99,8 @@ fun AppInfoItem(
 ) {
     ListItem(
         modifier = modifier,
-        text = { Text(appInfo.name) },
-        icon = {
+        headlineContent = { Text(appInfo.name) },
+        leadingContent = {
             appInfo.icon?.let {
                 Image(
                     modifier = Modifier.size(36.dp),
@@ -111,6 +109,6 @@ fun AppInfoItem(
                 )
             }
         },
-        trailing = trailing
+        trailingContent = trailing
     )
 }

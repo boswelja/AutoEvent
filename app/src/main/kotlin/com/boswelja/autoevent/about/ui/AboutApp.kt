@@ -4,14 +4,13 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.ListItem
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.RateReview
 import androidx.compose.material.icons.filled.Source
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,7 +27,6 @@ fun AboutApp(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SupportOptions(
     modifier: Modifier = Modifier
@@ -43,13 +41,12 @@ fun SupportOptions(
                 )
                 context.startActivity(intent)
             },
-            text = { Text(stringResource(R.string.rate_app)) },
-            icon = { Icon(Icons.Default.RateReview, null) }
+            headlineContent = { Text(stringResource(R.string.rate_app)) },
+            leadingContent = { Icon(Icons.Default.RateReview, null) }
         )
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun InfoOptions(
     modifier: Modifier = Modifier
@@ -64,8 +61,8 @@ fun InfoOptions(
                 )
                 context.startActivity(intent)
             },
-            text = { Text(stringResource(R.string.source_code)) },
-            icon = { Icon(Icons.Default.Source, null) }
+            headlineContent = { Text(stringResource(R.string.source_code)) },
+            leadingContent = { Icon(Icons.Default.Source, null) }
         )
         ListItem(
             modifier = Modifier.clickable {
@@ -75,8 +72,8 @@ fun InfoOptions(
                 )
                 context.startActivity(intent)
             },
-            text = { Text(stringResource(R.string.privacy_policy)) },
-            icon = { Icon(Icons.Default.PrivacyTip, null) }
+            headlineContent = { Text(stringResource(R.string.privacy_policy)) },
+            leadingContent = { Icon(Icons.Default.PrivacyTip, null) }
         )
     }
 }

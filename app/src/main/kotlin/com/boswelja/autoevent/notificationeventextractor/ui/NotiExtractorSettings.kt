@@ -5,18 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.ListItem
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AppBlocking
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,8 +30,6 @@ import com.boswelja.autoevent.main.ui.Destinations
 import com.boswelja.autoevent.notificationeventextractor.NotiListenerService
 import kotlinx.coroutines.Dispatchers
 
-@ExperimentalAnimationApi
-@ExperimentalMaterialApi
 @Composable
 fun NotiExtractorSettings(
     modifier: Modifier = Modifier,
@@ -54,8 +50,8 @@ fun NotiExtractorSettings(
             modifier = Modifier.clickable {
                 launchNotiListenerSettings(context)
             },
-            text = { Text(stringResource(R.string.noti_listener_settings_title)) },
-            secondaryText = {
+            headlineContent = { Text(stringResource(R.string.noti_listener_settings_title)) },
+            supportingContent = {
                 val text = if (serviceEnabled) {
                     stringResource(R.string.noti_listener_settings_enabled_desc)
                 } else {
@@ -63,7 +59,7 @@ fun NotiExtractorSettings(
                 }
                 Text(text)
             },
-            icon = { Icon(Icons.Default.Notifications, null) }
+            leadingContent = { Icon(Icons.Default.Notifications, null) }
         )
         BlocklistSetting(
             enabled = serviceEnabled,
@@ -78,8 +74,6 @@ fun NotiExtractorSettings(
     )
 }
 
-@ExperimentalAnimationApi
-@ExperimentalMaterialApi
 @Composable
 fun BlocklistSetting(
     modifier: Modifier = Modifier,
@@ -91,8 +85,8 @@ fun BlocklistSetting(
 
     ListItem(
         modifier = modifier.clickable(enabled = enabled, onClick = onNavigateToBlocklist),
-        text = { Text(stringResource(R.string.noti_extractor_blocklist_title)) },
-        secondaryText = {
+        headlineContent = { Text(stringResource(R.string.noti_extractor_blocklist_title)) },
+        supportingContent = {
             val text = context.resources.getQuantityString(
                 R.plurals.noti_extractor_blocklist_summary,
                 blocklistCount,
@@ -100,7 +94,7 @@ fun BlocklistSetting(
             )
             Text(text)
         },
-        icon = { Icon(Icons.Default.AppBlocking, null) }
+        leadingContent = { Icon(Icons.Default.AppBlocking, null) }
     )
 }
 

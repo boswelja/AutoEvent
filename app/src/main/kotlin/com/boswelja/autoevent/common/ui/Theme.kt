@@ -4,11 +4,13 @@ import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Colors
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Shapes
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
@@ -24,29 +26,21 @@ val shapes = Shapes(
 )
 
 @Composable
-fun getColors(darkTheme: Boolean): Colors {
+fun getColors(darkTheme: Boolean): ColorScheme {
     val context = LocalContext.current
     return remember(darkTheme) {
-        if (darkTheme) {
-            val darkPrimary = context.getDarkPrimaryColor()
-            darkColors(
-                primary = darkPrimary,
-                primaryVariant = darkPrimary,
-                secondary = darkPrimary,
-                secondaryVariant = darkPrimary,
-                background = context.getDarkBackgroundColor(),
-                surface = context.getDarkSurfaceColor()
-            )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (darkTheme) {
+                dynamicDarkColorScheme(context)
+            } else {
+                dynamicLightColorScheme(context)
+            }
         } else {
-            val lightPrimary = context.getLightPrimaryColor()
-            lightColors(
-                primary = lightPrimary,
-                primaryVariant = lightPrimary,
-                secondary = lightPrimary,
-                secondaryVariant = lightPrimary,
-                background = context.getLightBackgroundColor(),
-                surface = context.getLightSurfaceColor()
-            )
+            if (darkTheme) {
+                darkColorScheme()
+            } else {
+                lightColorScheme()
+            }
         }
     }
 }
@@ -105,7 +99,7 @@ fun AppTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colors = getColors(darkTheme = darkTheme),
+        colorScheme = getColors(darkTheme = darkTheme),
         shapes = shapes,
         content = content
     )
