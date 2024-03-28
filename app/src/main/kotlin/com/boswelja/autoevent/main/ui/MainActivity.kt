@@ -35,9 +35,6 @@ import androidx.navigation.compose.rememberNavController
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.common.ui.AppTheme
 import com.boswelja.autoevent.notificationeventextractor.ui.BlocklistScreen
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.google.accompanist.insets.statusBarsPadding
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,7 +57,6 @@ class MainActivity : AppCompatActivity() {
                 Scaffold(
                     topBar = {
                         TopAppBar(
-                            modifier = Modifier.statusBarsPadding(),
                             title = { Text(stringResource(R.string.app_name)) },
                             navigationIcon = {
                                 AnimatedVisibility(
@@ -82,15 +78,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 ) {
                     NavigationScreen(
-                        contentPadding = rememberInsetsPaddingValues(
-                            insets = LocalWindowInsets.current.systemBars,
-                            applyTop = false,
-                            applyBottom = true,
-                            additionalBottom = 16.dp,
-                            additionalEnd = 16.dp,
-                            additionalStart = 16.dp,
-                            additionalTop = 16.dp
-                        ),
+                        modifier = Modifier.padding(it),
+                        contentPadding = PaddingValues(16.dp),
                         navController = navController
                     )
                 }

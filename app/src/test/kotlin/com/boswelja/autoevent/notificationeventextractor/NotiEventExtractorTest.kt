@@ -32,7 +32,7 @@ import strikt.assertions.isNotNull
 import strikt.assertions.isNull
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.R])
+@Config(sdk = [Build.VERSION_CODES.UPSIDE_DOWN_CAKE])
 class NotiEventExtractorTest {
 
     private val settingsStore = InMemoryDataStore(NotiExtractorSettings())
