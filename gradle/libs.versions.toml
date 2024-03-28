@@ -21,7 +21,7 @@ coroutines = "1.8.0"
 entity-extraction = "16.0.0-beta5"
 junit = "4.13.2"
 mockk = "1.13.10"
-robolectric = "4.6.1"
+robolectric = "4.11.1"
 strikt = "0.31.0"
 
 [libraries]
