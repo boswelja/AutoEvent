@@ -15,14 +15,14 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.contentColorFor
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -51,7 +51,7 @@ fun DialogHeader(
         contentAlignment = Alignment.CenterStart
     ) {
         CompositionLocalProvider(
-            LocalTextStyle provides MaterialTheme.typography.h6,
+            LocalTextStyle provides MaterialTheme.typography.titleLarge,
             content = title
         )
     }
@@ -81,8 +81,8 @@ fun MaterialDialog(
     modifier: Modifier = Modifier,
     elevation: Dp = 24.dp,
     shape: Shape = MaterialTheme.shapes.medium,
-    backgroundColor: Color = MaterialTheme.colors.surface,
-    contentColor: Color = MaterialTheme.colors.contentColorFor(backgroundColor),
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
+    contentColor: Color = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
     dialogProperties: DialogProperties = DialogProperties(),
     onDismissRequest: () -> Unit,
     content: @Composable () -> Unit
@@ -96,7 +96,8 @@ fun MaterialDialog(
             shape = shape,
             color = backgroundColor,
             contentColor = contentColor,
-            elevation = elevation,
+            tonalElevation = elevation,
+            shadowElevation = elevation,
             content = content
         )
     }
@@ -112,8 +113,8 @@ fun <T> SimpleDialog(
     items: List<T>,
     elevation: Dp = 24.dp,
     shape: Shape = MaterialTheme.shapes.medium,
-    backgroundColor: Color = MaterialTheme.colors.surface,
-    contentColor: Color = MaterialTheme.colors.contentColorFor(backgroundColor),
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
+    contentColor: Color = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
     dialogProperties: DialogProperties = DialogProperties()
 ) {
     MaterialDialog(
@@ -127,7 +128,7 @@ fun <T> SimpleDialog(
     ) {
         Column {
             DialogHeader(title = title)
-            Divider()
+            HorizontalDivider()
             LazyColumn {
                 items(items) { item ->
                     Box(
@@ -155,8 +156,8 @@ fun <T> ConfirmationDialog(
     onItemSelectionChanged: (T) -> Unit,
     elevation: Dp = 24.dp,
     shape: Shape = MaterialTheme.shapes.medium,
-    backgroundColor: Color = MaterialTheme.colors.surface,
-    contentColor: Color = MaterialTheme.colors.contentColorFor(backgroundColor),
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
+    contentColor: Color = MaterialTheme.colorScheme.contentColorFor(backgroundColor),
     dialogProperties: DialogProperties = DialogProperties()
 ) {
     var dialogSelectedItem by remember(selectedItem) {
@@ -174,7 +175,7 @@ fun <T> ConfirmationDialog(
     ) {
         Column {
             DialogHeader(title = title)
-            Divider()
+            HorizontalDivider()
             LazyColumn(Modifier.weight(1f)) {
                 items(items) { item ->
                     Row(
@@ -191,7 +192,7 @@ fun <T> ConfirmationDialog(
                     }
                 }
             }
-            Divider()
+            HorizontalDivider()
             DialogButtons(
                 positiveButton = {
                     TextButton(

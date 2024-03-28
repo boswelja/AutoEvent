@@ -2,17 +2,16 @@ package com.boswelja.autoevent.eventextractor.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Checkbox
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.ListItem
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddLocation
 import androidx.compose.material.icons.filled.AlternateEmail
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.ViewDay
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,7 +31,6 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
 
-@ExperimentalMaterialApi
 @Composable
 fun ExtractorSettings(
     modifier: Modifier = Modifier
@@ -60,7 +58,7 @@ fun ExtractorSettings(
     )
     Column(modifier) {
         DialogPickerSetting(
-            items = ExtractorSettings.ExtractorLanguage.values(),
+            items = ExtractorSettings.ExtractorLanguage.entries.toTypedArray(),
             selectedItem = language,
             onItemSelected = { viewModel.updateExtractLanguage(it) },
             itemContent = { Text(it.displayName()) },
@@ -70,22 +68,22 @@ fun ExtractorSettings(
         )
         ListItem(
             modifier = Modifier.clickable { viewModel.updateExtractEmails(!extractEmails) },
-            text = { Text(stringResource(R.string.extract_emails_settings_title)) },
-            icon = { Icon(imageVector = Icons.Default.AlternateEmail, contentDescription = null) },
-            trailing = { Checkbox(onCheckedChange = null, checked = extractEmails) }
+            headlineContent = { Text(stringResource(R.string.extract_emails_settings_title)) },
+            leadingContent = { Icon(imageVector = Icons.Default.AlternateEmail, contentDescription = null) },
+            trailingContent = { Checkbox(onCheckedChange = null, checked = extractEmails) }
         )
         ListItem(
             modifier = Modifier.clickable { viewModel.updateExtractAddress(!extractAddress) },
-            text = { Text(stringResource(R.string.extract_address_settings_title)) },
-            icon = { Icon(imageVector = Icons.Default.AddLocation, contentDescription = null) },
-            trailing = { Checkbox(onCheckedChange = null, checked = extractAddress) }
+            headlineContent = { Text(stringResource(R.string.extract_address_settings_title)) },
+            leadingContent = { Icon(imageVector = Icons.Default.AddLocation, contentDescription = null) },
+            trailingContent = { Checkbox(onCheckedChange = null, checked = extractAddress) }
         )
         ListItem(
             modifier = Modifier.clickable { viewModel.updateAllDayEvents(!ignoreAllDayEvents) },
-            text = { Text(stringResource(R.string.extractor_ignore_allday_title)) },
-            secondaryText = { Text(stringResource(R.string.extractor_ignore_allday_summary)) },
-            icon = { Icon(Icons.Default.ViewDay, null) },
-            trailing = { Checkbox(onCheckedChange = null, checked = ignoreAllDayEvents) }
+            headlineContent = { Text(stringResource(R.string.extractor_ignore_allday_title)) },
+            supportingContent = { Text(stringResource(R.string.extractor_ignore_allday_summary)) },
+            leadingContent = { Icon(Icons.Default.ViewDay, null) },
+            trailingContent = { Checkbox(onCheckedChange = null, checked = ignoreAllDayEvents) }
         )
         DefaultDurationSetting(
             durationMillis = defaultDurationMillis,
@@ -94,7 +92,6 @@ fun ExtractorSettings(
     }
 }
 
-@ExperimentalMaterialApi
 @Composable
 fun DefaultDurationSetting(
     modifier: Modifier = Modifier,
@@ -124,9 +121,9 @@ fun DefaultDurationSetting(
 
     ListItem(
         modifier = modifier.clickable { dialogVisible = true },
-        icon = { Icon(Icons.Default.Timer, null) },
-        text = { Text(stringResource(R.string.default_duration_title)) },
-        secondaryText = { Text(displayText) }
+        leadingContent = { Icon(Icons.Default.Timer, null) },
+        headlineContent = { Text(stringResource(R.string.default_duration_title)) },
+        supportingContent = { Text(displayText) }
     )
 
     if (dialogVisible) {

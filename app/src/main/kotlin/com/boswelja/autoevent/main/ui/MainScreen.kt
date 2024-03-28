@@ -1,13 +1,11 @@
 package com.boswelja.autoevent.main.ui
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,8 +15,6 @@ import com.boswelja.autoevent.about.ui.AboutApp
 import com.boswelja.autoevent.eventextractor.ui.ExtractorSettings
 import com.boswelja.autoevent.notificationeventextractor.ui.NotiExtractorSettings
 
-@ExperimentalAnimationApi
-@ExperimentalMaterialApi
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
@@ -46,8 +42,6 @@ fun MainScreen(
     }
 }
 
-@ExperimentalAnimationApi
-@ExperimentalMaterialApi
 @Composable
 fun NotiExtractorCard(
     modifier: Modifier = Modifier,
@@ -65,7 +59,6 @@ fun NotiExtractorCard(
     }
 }
 
-@ExperimentalMaterialApi
 @Composable
 fun ExtractorSettingsCard(
     modifier: Modifier = Modifier,
