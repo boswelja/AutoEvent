@@ -1,5 +1,7 @@
 package com.boswelja.autoevent.main.ui
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -9,7 +11,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -40,6 +40,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 0)
+        }
 
         setContent {
             val navController = rememberNavController()
@@ -71,8 +75,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 ) {
                     NavigationScreen(
-                        modifier = Modifier.padding(it),
-                        contentPadding = PaddingValues(16.dp),
+                        modifier = Modifier,
+                        contentPadding = it,
                         navController = navController
                     )
                 }
@@ -101,7 +105,8 @@ fun NavigationScreen(
         }
         composable(Destinations.BLOCKLIST.name) {
             BlocklistScreen(
-                modifier = Modifier.fillMaxSize().padding(contentPadding)
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = contentPadding,
             )
         }
     }

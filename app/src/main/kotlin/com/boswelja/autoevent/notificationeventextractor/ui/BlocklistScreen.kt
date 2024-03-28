@@ -1,21 +1,20 @@
 package com.boswelja.autoevent.notificationeventextractor.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AppBlocking
-import androidx.compose.material3.Card
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,13 +28,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.boswelja.autoevent.R
 import com.boswelja.autoevent.common.AppInfo
-import com.boswelja.autoevent.common.ui.CardHeader
 import com.boswelja.autoevent.common.ui.SimpleDialog
 import kotlinx.coroutines.Dispatchers
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BlocklistScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues()
 ) {
     val viewModel: BlocklistViewModel = viewModel()
     val blocklist by viewModel.blocklist.collectAsState(emptyList(), Dispatchers.IO)
@@ -43,51 +43,45 @@ fun BlocklistScreen(
     var addDialogVisible by remember {
         mutableStateOf(false)
     }
-
-    Card(modifier) {
-        Column {
-            CardHeader(
-                title = {
-                    Text(stringResource(R.string.noti_extractor_blocklist_title))
-                },
-                icon = {
-                    Icon(Icons.Default.AppBlocking, null)
-                }
-            )
-            HorizontalDivider()
-            LazyColumn {
-                items(blocklist) { appInfo ->
-                    AppInfoItem(
-                        appInfo = appInfo,
-                        trailing = {
-                            TextButton(
-                                onClick = { viewModel.removeFromBlocklist(appInfo.packageName) }
-                            ) {
-                                Text(stringResource(R.string.remove))
-                            }
-                        }
-                    )
-                }
-                item {
-                    ListItem(
-                        modifier = Modifier.clickable { addDialogVisible = true },
-                        headlineContent = { Text(stringResource(R.string.add)) },
-                        leadingContent = { Icon(Icons.Default.Add, null) }
-                    )
-                }
-            }
-        }
-
-        if (addDialogVisible) {
-            val allApps by viewModel.allApps.collectAsState()
-            SimpleDialog(
-                title = { Text(stringResource(R.string.noti_extractor_blocklist_add)) },
-                onDismissRequest = { addDialogVisible = false },
-                onItemSelected = { viewModel.addToBlocklist(it.packageName) },
-                itemContent = { AppInfoItem(appInfo = it) },
-                items = allApps
+    LazyColumn(modifier, contentPadding = contentPadding) {
+        stickyHeader {
+            Text(
+                text = stringResource(R.string.noti_extractor_blocklist_title),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).then(modifier)
             )
         }
+        items(blocklist) { appInfo ->
+            AppInfoItem(
+                appInfo = appInfo,
+                trailing = {
+                    TextButton(
+                        onClick = { viewModel.removeFromBlocklist(appInfo.packageName) }
+                    ) {
+                        Text(stringResource(R.string.remove))
+                    }
+                }
+            )
+        }
+        item {
+            ListItem(
+                modifier = Modifier.clickable { addDialogVisible = true },
+                headlineContent = { Text(stringResource(R.string.add)) },
+                leadingContent = { Icon(Icons.Default.Add, null) }
+            )
+        }
+    }
+
+    if (addDialogVisible) {
+        val allApps by viewModel.allApps.collectAsState()
+        SimpleDialog(
+            title = { Text(stringResource(R.string.noti_extractor_blocklist_add)) },
+            onDismissRequest = { addDialogVisible = false },
+            onItemSelected = { viewModel.addToBlocklist(it.packageName) },
+            itemContent = { AppInfoItem(appInfo = it) },
+            items = allApps
+        )
     }
 }
 

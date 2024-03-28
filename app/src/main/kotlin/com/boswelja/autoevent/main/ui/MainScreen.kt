@@ -1,10 +1,13 @@
 package com.boswelja.autoevent.main.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,60 +32,32 @@ fun MainScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
-            NotiExtractorCard(
-                onNavigate = onNavigate
-            )
+            Column {
+                SectionHeader(stringResource(R.string.noti_extractor_settings_title))
+                NotiExtractorSettings(onNavigate = onNavigate)
+            }
         }
         item {
-            ExtractorSettingsCard()
+            Column {
+                SectionHeader(stringResource(R.string.extractor_settings_title))
+                ExtractorSettings()
+            }
         }
         item {
-            AboutAppCard()
+            Column {
+                SectionHeader(stringResource(R.string.about_app_title))
+                AboutApp()
+            }
         }
     }
 }
 
 @Composable
-fun NotiExtractorCard(
-    modifier: Modifier = Modifier,
-    contentModifier: Modifier = Modifier,
-    onNavigate: (Destinations) -> Unit
-) {
-    MainCardItem(
-        modifier = modifier,
-        title = { Text(stringResource(R.string.noti_extractor_settings_title)) }
-    ) {
-        NotiExtractorSettings(
-            modifier = contentModifier,
-            onNavigate = onNavigate
-        )
-    }
-}
-
-@Composable
-fun ExtractorSettingsCard(
-    modifier: Modifier = Modifier,
-    contentModifier: Modifier = Modifier
-) {
-    MainCardItem(
-        modifier = modifier,
-        title = { Text(stringResource(R.string.extractor_settings_title)) }
-    ) {
-        ExtractorSettings(
-            modifier = contentModifier
-        )
-    }
-}
-
-@Composable
-fun AboutAppCard(
-    modifier: Modifier = Modifier,
-    contentModifier: Modifier = Modifier
-) {
-    MainCardItem(
-        modifier = modifier,
-        title = { Text(stringResource(R.string.about_app_title)) }
-    ) {
-        AboutApp(modifier = contentModifier)
-    }
+internal fun SectionHeader(text: String, modifier: Modifier = Modifier) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).then(modifier)
+    )
 }
