@@ -3,15 +3,16 @@ package com.boswelja.autoevent.notificationeventextractor.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -33,7 +34,8 @@ import kotlinx.coroutines.Dispatchers
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BlocklistScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues()
 ) {
     val viewModel: BlocklistViewModel = viewModel()
     val blocklist by viewModel.blocklist.collectAsState(emptyList(), Dispatchers.IO)
@@ -41,30 +43,33 @@ fun BlocklistScreen(
     var addDialogVisible by remember {
         mutableStateOf(false)
     }
-    Column(modifier) {
-        LazyColumn {
-            stickyHeader {
-                Text(stringResource(R.string.noti_extractor_blocklist_title))
-            }
-            items(blocklist) { appInfo ->
-                AppInfoItem(
-                    appInfo = appInfo,
-                    trailing = {
-                        TextButton(
-                            onClick = { viewModel.removeFromBlocklist(appInfo.packageName) }
-                        ) {
-                            Text(stringResource(R.string.remove))
-                        }
+    LazyColumn(modifier, contentPadding = contentPadding) {
+        stickyHeader {
+            Text(
+                text = stringResource(R.string.noti_extractor_blocklist_title),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).then(modifier)
+            )
+        }
+        items(blocklist) { appInfo ->
+            AppInfoItem(
+                appInfo = appInfo,
+                trailing = {
+                    TextButton(
+                        onClick = { viewModel.removeFromBlocklist(appInfo.packageName) }
+                    ) {
+                        Text(stringResource(R.string.remove))
                     }
-                )
-            }
-            item {
-                ListItem(
-                    modifier = Modifier.clickable { addDialogVisible = true },
-                    headlineContent = { Text(stringResource(R.string.add)) },
-                    leadingContent = { Icon(Icons.Default.Add, null) }
-                )
-            }
+                }
+            )
+        }
+        item {
+            ListItem(
+                modifier = Modifier.clickable { addDialogVisible = true },
+                headlineContent = { Text(stringResource(R.string.add)) },
+                leadingContent = { Icon(Icons.Default.Add, null) }
+            )
         }
     }
 
