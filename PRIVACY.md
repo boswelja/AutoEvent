@@ -9,9 +9,6 @@ AutoEvent may store a list of apps you've chosen to ignore notifications from. T
 AutoEvent may read your notifications to extract event data from. This information does not leave your device, and is not stored in any persistent manner.
 
 ## Third-Party Privacy Policies
-This Privacy Policy does not apply to any libraries used within Smartwatch Extensions. Libraries used include, but are not limited to:
+This Privacy Policy does not apply to any libraries used within AutoEvent. Libraries used include, but are not limited to:
 * AndroidX components
 * Google MLKit Entity Extraction
-
-### Contact
-If you have any questions, please contact me at boswelja78@gmail.com
