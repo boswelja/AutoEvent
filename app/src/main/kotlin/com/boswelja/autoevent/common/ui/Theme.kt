@@ -10,14 +10,10 @@ import androidx.compose.material.Shapes
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 const val useMonet = true
 
@@ -108,18 +104,9 @@ fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-
     MaterialTheme(
         colors = getColors(darkTheme = darkTheme),
-        shapes = shapes
-    ) {
-        ProvideWindowInsets {
-            val darkIcons = MaterialTheme.colors.background.luminance() > 0.5f
-            LaunchedEffect(darkTheme) {
-                systemUiController.setSystemBarsColor(Color.Transparent, darkIcons)
-            }
-            content()
-        }
-    }
+        shapes = shapes,
+        content = content
+    )
 }

@@ -15,7 +15,6 @@ composeCompiler = "1.5.11"
 activityCompose = "1.8.2"
 lifecycleCompose = "2.7.0"
 navigationCompose = "2.7.7"
-accompanist = "0.28.0"
 # Misc versions
 coroutines = "1.8.0"
 entity-extraction = "16.0.0-beta5"
@@ -48,8 +47,6 @@ androidx-compose-material-icons-extended = { module = "androidx.compose.material
 androidx-compose-activity = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-compose-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleCompose" }
 androidx-compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-accompanist-sysuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
-accompanist-insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
 # Misc libraries
 mlkit-entityextraction = { module = "com.google.mlkit:entity-extraction", version.ref = "entity-extraction" }
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -72,6 +69,4 @@ compose = [
     "androidx-compose-activity",
     "androidx-compose-viewmodel",
     "androidx-compose-navigation",
-    "accompanist-sysuicontroller",
-    "accompanist-insets"
 ]
