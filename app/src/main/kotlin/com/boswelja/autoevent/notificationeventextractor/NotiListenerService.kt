@@ -22,7 +22,7 @@ class NotiListenerService : NotificationListenerService() {
     }
 
     override fun onListenerDisconnected() {
-        notiExtractor.close()
+        if (::notiExtractor.isInitialized) notiExtractor.close()
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
