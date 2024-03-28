@@ -71,8 +71,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 ) {
                     NavigationScreen(
-                        modifier = Modifier.padding(it),
-                        contentPadding = PaddingValues(16.dp),
+                        modifier = Modifier,
+                        contentPadding = it,
                         navController = navController
                     )
                 }

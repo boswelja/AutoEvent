@@ -1,6 +1,7 @@
 package com.boswelja.autoevent.main.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -48,10 +49,8 @@ fun NotiExtractorCard(
     contentModifier: Modifier = Modifier,
     onNavigate: (Destinations) -> Unit
 ) {
-    MainCardItem(
-        modifier = modifier,
-        title = { Text(stringResource(R.string.noti_extractor_settings_title)) }
-    ) {
+    Column(modifier = modifier) {
+        Text(stringResource(R.string.noti_extractor_settings_title))
         NotiExtractorSettings(
             modifier = contentModifier,
             onNavigate = onNavigate
@@ -64,10 +63,8 @@ fun ExtractorSettingsCard(
     modifier: Modifier = Modifier,
     contentModifier: Modifier = Modifier
 ) {
-    MainCardItem(
-        modifier = modifier,
-        title = { Text(stringResource(R.string.extractor_settings_title)) }
-    ) {
+    Column(modifier = modifier) {
+        Text(stringResource(R.string.extractor_settings_title))
         ExtractorSettings(
             modifier = contentModifier
         )
@@ -79,10 +76,8 @@ fun AboutAppCard(
     modifier: Modifier = Modifier,
     contentModifier: Modifier = Modifier
 ) {
-    MainCardItem(
-        modifier = modifier,
-        title = { Text(stringResource(R.string.about_app_title)) }
-    ) {
+    Column(modifier = modifier) {
+        Text(stringResource(R.string.about_app_title))
         AboutApp(modifier = contentModifier)
     }
 }
