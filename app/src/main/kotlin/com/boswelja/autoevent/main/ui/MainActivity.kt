@@ -1,5 +1,7 @@
 package com.boswelja.autoevent.main.ui
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -38,6 +40,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 0)
+        }
 
         setContent {
             val navController = rememberNavController()
