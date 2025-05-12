@@ -63,7 +63,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
       - run: bash ./gradlew lint
-      - uses: yutailang0119/action-android-lint@v4
+      - uses: yutailang0119/action-android-lint@v5
         if: ${{ always() }}
         continue-on-error: true
         with:
