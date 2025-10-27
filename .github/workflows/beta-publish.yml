@@ -61,7 +61,7 @@ jobs:
           release-branch: main
 
       - name: Download app-release.aab
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: app-release.aab
           path: release/
