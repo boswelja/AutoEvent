@@ -67,7 +67,7 @@ jobs:
           path: release/
 
       - name: Create Tag
-        uses: negz/create-tag@v1
+        uses: negz/create-tag@v2
         with:
           version: ${{ steps.version.outputs.version }}
           message: 'Version ${{ steps.version.outputs.version }}'
